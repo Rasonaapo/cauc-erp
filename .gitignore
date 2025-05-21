@@ -1,0 +1,10 @@
+*.pyc
+__pycache__/
+.env
+db.sqlite3
+media/*
+!media/avatar.png
+staticfiles/
+Dockerfile
+docker-compose.yml
+
