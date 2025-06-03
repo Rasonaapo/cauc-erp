@@ -4,26 +4,26 @@
   <div class="logo-box">
     <!-- Brand Logo Light -->
     <a href="{% url 'dashboard' %}" class="logo-light">
-      <img src="{% static 'logo/revlo.jpeg' %}" alt="logo" class="logo-lg" />
+      <img src="{% static 'logo/cauc_log_o.png' %}" alt="logo" class="logo-lg" />
       <img
-        src="{% static 'logo/revlo.jpeg' %}"
+        src="{% static 'logo/cauc_logo_.png' %}"
         alt="small logo"
-        class="logo-lg"
+        class="logo-xl"
       />
     </a>
 
     <!-- Brand Logo Dark -->
     <a href="{% url 'dashboard' %}" class="logo-dark">
       <img
-        src="{% static 'logo/revlo.jpeg' %}"
+        src="{% static 'logo/cauc_logo.png' %}"
         alt="dark logo"
-        class="logo-lg"
+        class="logo-lgl" width='50' height='50'
       />
-      <img
-        src="{% static 'logo/revlo.jpeg' %}"
+      {% comment %} <img
+        src="{% static 'logo/cauc_logo_.png' %}"
         alt="small logo"
-        class="logo-sm"
-      />
+        class="logo-xl"
+      /> {% endcomment %}
     </a>
   </div>
 
@@ -97,21 +97,21 @@
         <div class="collapse" id="menuMaps">
             <ul class="sub-menu">
                 <li class="menu-item">
-                    <a href="{% url 'meeting-list' %}" class="menu-link">
+                    {% comment %} <a href="{% url 'meeting-list' %}" class="menu-link">
                         <span class="menu-text">Meetings</span>
-                    </a>
+                    </a> {% endcomment %}
                 </li>
 
                 <li class="menu-item">
-                  <a href="{% url 'vendor-list' %}" class="menu-link">
+                  {% comment %} <a href="{% url 'vendor-list' %}" class="menu-link">
                       <span class="menu-text">Vendors</span>
-                  </a>
+                  </a> {% endcomment %}
               </li>
 
                 <li class="menu-item">
-                    <a href="{% url 'document-list' %}" class="menu-link">
+                    {% comment %} <a href="{% url 'document-list' %}" class="menu-link">
                         <span class="menu-text">Business Documents</span>
-                    </a>
+                    </a> {% endcomment %}
                 </li>
 
             </ul>
@@ -119,168 +119,200 @@
       </li>
       <!-- End of Administrations -->
 
+    
+
+
+          <!-- HR Menus -->
+          <li class="menu-item">
+            <a
+              href="ecommerce-dashboard.html#menuMultilevel"
+              data-bs-toggle="collapse"
+              class="menu-link"
+            >
+              <span class="menu-icon"><i class="fas fa-users-cog"></i></span>
+              <span class="menu-text"> HR </span>
+              <span class="menu-arrow"></span>
+            </a>
+            
+            <div class="collapse" id="menuMultilevel">
+              <ul class="sub-menu">
+                <li class="menu-item">
+                  <a
+                    href="ecommerce-dashboard.html#menuMultilevel2"
+                    data-bs-toggle="collapse"
+                    class="menu-link"
+                  >
+                    <span class="menu-text"> Employee </span>
+                    <span class="menu-arrow"></span>
+                  </a>
+                  <div class="collapse" id="menuMultilevel2">
+                    <ul class="sub-menu">
       
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'employee-list' %}" class="menu-link">
+                          <span class="menu-text">Employees</span>
+                        </a> {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'department-list' %}" class="menu-link">
+                          <span class="menu-text">Departments</span>
+                        </a> {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'designation-list' %}" class="menu-link">
+                          <span class="menu-text">Designations</span>
+                        </a> {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'job-list' %}" class="menu-link">
+                          <span class="menu-text">Jobs</span>
+                        </a> {% endcomment %}
+                      </li>
+                      
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'job-history-list' %}" class="menu-link">
+                          <span class="menu-text">Job Histories</span>
+                        </a> {% endcomment %}
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+    
+    
+                <li class="menu-item">
+                  <a
+                    href="ecommerce-dashboard.html#menuMultilevel4"
+                    data-bs-toggle="collapse"
+                    class="menu-link"
+                  >
+                    <span class="menu-text">Leave</span>
+                    <span class="menu-arrow"></span>
+                  </a>
+                  <div class="collapse" id="menuMultilevel4">
+                    <ul class="sub-menu">
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'leave-type-list' %}" class="menu-link">
+                          <span class="menu-text">Leave Types</span>
+                        </a>                {% endcomment %}
+                      </li>
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'leave-balance-list' %}" class="menu-link">
+                          <span class="menu-text">Leave Balances</span>
+                        </a>                {% endcomment %}
+                      </li>
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'leave-request-list' %}" class="menu-link">
+                          <span class="menu-text">Leave Requests</span>
+                        </a>                {% endcomment %}
+                      </li>
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'holiday-list' %}" class="menu-link">
+                          <span class="menu-text">Public Holidays</span>
+                        </a>                {% endcomment %}
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+    
+                <li class="menu-item">
+                  <a
+                    href="ecommerce-dashboard.html#menuMultilevel5"
+                    data-bs-toggle="collapse"
+                    class="menu-link"
+                  >
+                    <span class="menu-text">SMS</span>
+                    <span class="menu-arrow"></span>
+                  </a>
+                  <div class="collapse" id="menuMultilevel5">
+                    <ul class="sub-menu">
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'sms-list' %}" class="menu-link">
+                          <span class="menu-text">SMS Schedules</span>
+                        </a>                {% endcomment %}
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+    
+              </ul>
+            </div>
+          </li>
+          <!-- end of HR menus -->
+    
+      <!-- Payroll Menu -->
+   
 
-      <!-- Operations Menu -->
       <li class="menu-item">
-        <a
-          href="ecommerce-dashboard.html#operationsmenuMultilevel"
-          data-bs-toggle="collapse"
-          class="menu-link"
-        >
-          <span class="menu-icon"><i class="fas fa-cogs"></i> <!--i data-feather="file-text"></i--></span>
-          <span class="menu-text"> Operations </span>
-          <span class="menu-arrow"></span>
-        </a>
-  
-        <div class="collapse" id="operationsmenuMultilevel">
-          <ul class="sub-menu">
-  
-            <li class="menu-item">
-              <a
-                href="ecommerce-dashboard.html#inventorySubMenu"
-                data-bs-toggle="collapse"
-                class="menu-link"
-              >
-                <span class="menu-text"> Inventory Management </span>
-                <span class="menu-arrow"></span>
-              </a>
-              <div class="collapse" id="inventorySubMenu">
-                <ul class="sub-menu">
-
-                  <li class="menu-item">
-                    <a href="{% url 'unit-type-list' %}" class="menu-link">
-                      <span class="menu-text">Unit Types</span>
-                    </a>
-                  </li>
-
-                   <li class="menu-item">
-                    <a href="{% url 'category-list' %}" class="menu-link">
-                      <span class="menu-text">Categories</span>
-                    </a>
-                  </li>
-
-                  <li class="menu-item">
-                    <a href="{% url 'product-list' %}" class="menu-link">
-                      <span class="menu-text">Products</span>
-                    </a>
-                  </li>
-
-                  <li class="menu-item">
-                    <a href="{% url 'category-list' %}" class="menu-link">
-                      <span class="menu-text">Product Units</span>
-                    </a>
-                  </li>
-  
-                  <li class="menu-item">
-                    <a href="{% url 'inventory-list' %}" class="menu-link">
-                      <span class="menu-text">Inventories</span>
-                    </a>
-                  </li>
-
-                </ul>
-              </div>
-            </li>
-
-            <!-- Logistics and Delivery -->
-            <li class="menu-item">
-              <a
-                href="ecommerce-dashboard.html#deliveriesSubMenu"
-                data-bs-toggle="collapse"
-                class="menu-link"
-              >
-                <span class="menu-text"> Logistics & Deliveries </span>
-                <span class="menu-arrow"></span>
-              </a>
-              <div class="collapse" id="deliveriesSubMenu">
-                <ul class="sub-menu">
-  
-                </ul>
-              </div>
-            </li>
-
-            <!-- Customer Sub-Menu -->
-            <li class="menu-item">
-              <a
-                href="ecommerce-dashboard.html#customerSubMenu"
-                data-bs-toggle="collapse"
-                class="menu-link"
-              >
-                <span class="menu-text"> Customer Management </span>
-                <span class="menu-arrow"></span>
-              </a>
-              <div class="collapse" id="customerSubMenu">
-                <ul class="sub-menu">
-  
-                </ul>
-              </div>
-            </li>
-
-            <!-- Supplier Managment -->
-            <li class="menu-item">
-              <a
-                href="ecommerce-dashboard.html#supplierSubMenu"
-                data-bs-toggle="collapse"
-                class="menu-link"
-              >
-                <span class="menu-text"> Supplier Management </span>
-                <span class="menu-arrow"></span>
-              </a>
-              <div class="collapse" id="supplierSubMenu">
-                <ul class="sub-menu">
-  
-                </ul>
-              </div>
-            </li>
-  
-          </ul>
-        </div>
-      </li>
-      <!-- End of Operations -->
-
-      <!-- Sales Menu -->
-      <li class="menu-item">
-        <a href="forms-pickers.html#menuMaps" data-bs-toggle="collapse" class="menu-link">
-            <span class="menu-icon"><i class="fas fa-luggage-cart"></i></span>
-            <span class="menu-text"> Sales </span>
+        <a href="forms-pickers.html#menuAdministration" data-bs-toggle="collapse" class="menu-link">
+            <span class="menu-icon"><i class="fas fa-money-check-alt"></i></span>
+            <span class="menu-text"> Payroll </span>
             <span class="menu-arrow"></span>
         </a>
-        <div class="collapse" id="menuMaps">
+        <div class="collapse" id="menuAdministration">
             <ul class="sub-menu">
-                <li class="menu-item">
-                    <a href="" class="menu-link">
-                        <span class="menu-text">Sale Targets</span>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="" class="menu-link">
-                      <span class="menu-text">Orders</span>
-                  </a>
-              </li>
-
-                <li class="menu-item">
-                    <a href="" class="menu-link">
-                        <span class="menu-text">Warehouse Sales</span>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="" class="menu-link">
-                      <span class="menu-text">Salesman Sales</span>
-                  </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="" class="menu-link">
-                      <span class="menu-text">Damages</span>
-                  </a>
-                </li>
+                     <li class="menu-item">
+                        {% comment %} <a href="{% url 'bank-list' %}" class="menu-link">
+                          <span class="menu-text">Banks</span>
+                        </a>                {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'salarygrade-list' %}" class="menu-link">
+                          <span class="menu-text">Grades</span>
+                        </a>                {% endcomment %}
+                      </li>
+                     
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'setup-tax' %}" class="menu-link">
+                          <span class="menu-text">Setup Tax</span>
+                        </a>                {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'salaryitem-list' %}" class="menu-link">
+                          <span class="menu-text">Salary Items</span>
+                        </a>  {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'loan-list' %}" class="menu-link">
+                          <span class="menu-text">Loans</span>
+                        </a>  {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'creditunion-list' %}" class="menu-link">
+                          <span class="menu-text">Credit Unions</span>
+                        </a>  {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'payroll-list' %}" class="menu-link">
+                          <span class="menu-text">Payrolls</span>
+                        </a>  {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'payroll-payslip' %}" class="menu-link">
+                          <span class="menu-text">Payslips</span>
+                        </a>  {% endcomment %}
+                      </li>
+    
+                      <li class="menu-item">
+                        {% comment %} <a href="{% url 'payroll-add' %}" class="menu-link">
+                          <span class="menu-text">Process Payroll</span>
+                        </a>  {% endcomment %}
+                      </li>  
 
             </ul>
         </div>
-      </li>  
-      <!-- End of Sales Menu -->
+      </li>
+      <!-- End of Payroll Menu-->
+
 
       <!-- Finance Menu -->
       <li class="menu-item">
@@ -376,292 +408,6 @@
         </div>
       </li>
       <!-- End of Finance Menu -->
-
-          <!-- HR Menus -->
-          <li class="menu-item">
-            <a
-              href="ecommerce-dashboard.html#menuMultilevel"
-              data-bs-toggle="collapse"
-              class="menu-link"
-            >
-              <span class="menu-icon"><i class="fas fa-users-cog"></i></span>
-              <span class="menu-text"> HR </span>
-              <span class="menu-arrow"></span>
-            </a>
-            
-            <div class="collapse" id="menuMultilevel">
-              <ul class="sub-menu">
-                <li class="menu-item">
-                  <a
-                    href="ecommerce-dashboard.html#menuMultilevel2"
-                    data-bs-toggle="collapse"
-                    class="menu-link"
-                  >
-                    <span class="menu-text"> Employee </span>
-                    <span class="menu-arrow"></span>
-                  </a>
-                  <div class="collapse" id="menuMultilevel2">
-                    <ul class="sub-menu">
-      
-                      <li class="menu-item">
-                        <a href="{% url 'employee-list' %}" class="menu-link">
-                          <span class="menu-text">Employees</span>
-                        </a>
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'department-list' %}" class="menu-link">
-                          <span class="menu-text">Departments</span>
-                        </a>
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'designation-list' %}" class="menu-link">
-                          <span class="menu-text">Designations</span>
-                        </a>
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'job-list' %}" class="menu-link">
-                          <span class="menu-text">Jobs</span>
-                        </a>
-                      </li>
-                      
-                      <li class="menu-item">
-                        <a href="{% url 'job-history-list' %}" class="menu-link">
-                          <span class="menu-text">Job Histories</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-    
-                <li class="menu-item">
-                  <a
-                    href="ecommerce-dashboard.html#menuMultilevel3"
-                    data-bs-toggle="collapse"
-                    class="menu-link"
-                  >
-                    <span class="menu-text">Payroll</span>
-                    <span class="menu-arrow"></span>
-                  </a>
-                  <div class="collapse" id="menuMultilevel3">
-                    <ul class="sub-menu">
-                     
-                      <li class="menu-item">
-                        <a href="{% url 'bank-list' %}" class="menu-link">
-                          <span class="menu-text">Banks</span>
-                        </a>               
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'salarygrade-list' %}" class="menu-link">
-                          <span class="menu-text">Grades</span>
-                        </a>               
-                      </li>
-                     
-                      <li class="menu-item">
-                        <a href="{% url 'setup-tax' %}" class="menu-link">
-                          <span class="menu-text">Setup Tax</span>
-                        </a>               
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'salaryitem-list' %}" class="menu-link">
-                          <span class="menu-text">Salary Items</span>
-                        </a> 
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'loan-list' %}" class="menu-link">
-                          <span class="menu-text">Loans</span>
-                        </a> 
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'creditunion-list' %}" class="menu-link">
-                          <span class="menu-text">Credit Unions</span>
-                        </a> 
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'payroll-list' %}" class="menu-link">
-                          <span class="menu-text">Payrolls</span>
-                        </a> 
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'payroll-payslip' %}" class="menu-link">
-                          <span class="menu-text">Payslips</span>
-                        </a> 
-                      </li>
-    
-                      <li class="menu-item">
-                        <a href="{% url 'payroll-add' %}" class="menu-link">
-                          <span class="menu-text">Process Payroll</span>
-                        </a> 
-                      </li>
-    
-                    </ul>
-                  </div>
-                </li>
-    
-                <li class="menu-item">
-                  <a
-                    href="ecommerce-dashboard.html#menuMultilevel4"
-                    data-bs-toggle="collapse"
-                    class="menu-link"
-                  >
-                    <span class="menu-text">Leave</span>
-                    <span class="menu-arrow"></span>
-                  </a>
-                  <div class="collapse" id="menuMultilevel4">
-                    <ul class="sub-menu">
-                      <li class="menu-item">
-                        <a href="{% url 'leave-type-list' %}" class="menu-link">
-                          <span class="menu-text">Leave Types</span>
-                        </a>               
-                      </li>
-                      <li class="menu-item">
-                        <a href="{% url 'leave-balance-list' %}" class="menu-link">
-                          <span class="menu-text">Leave Balances</span>
-                        </a>               
-                      </li>
-                      <li class="menu-item">
-                        <a href="{% url 'leave-request-list' %}" class="menu-link">
-                          <span class="menu-text">Leave Requests</span>
-                        </a>               
-                      </li>
-                      <li class="menu-item">
-                        <a href="{% url 'holiday-list' %}" class="menu-link">
-                          <span class="menu-text">Public Holidays</span>
-                        </a>               
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-    
-                <li class="menu-item">
-                  <a
-                    href="ecommerce-dashboard.html#menuMultilevel5"
-                    data-bs-toggle="collapse"
-                    class="menu-link"
-                  >
-                    <span class="menu-text">SMS</span>
-                    <span class="menu-arrow"></span>
-                  </a>
-                  <div class="collapse" id="menuMultilevel5">
-                    <ul class="sub-menu">
-    
-                      <li class="menu-item">
-                        <a href="{% url 'sms-list' %}" class="menu-link">
-                          <span class="menu-text">SMS Schedules</span>
-                        </a>               
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-    
-              </ul>
-            </div>
-          </li>
-          <!-- end of HR menus -->
-
-        <!-- Warehouse Menu -->
-
-      <li class="menu-item">
-        <a href="forms-pickers.html#menuWarehouse" data-bs-toggle="collapse" class="menu-link">
-            <span class="menu-icon"><i class="fas fa-warehouse"></i></span>
-            <span class="menu-text"> Warehouse  </span>
-            <span class="menu-arrow"></span>
-        </a>
-        <div class="collapse" id="menuWarehouse">
-            <ul class="sub-menu">
- 
-              <li class="menu-item">
-                <a href="" class="menu-link">
-                    <span class="menu-text">Warehouses</span>
-                </a>
-              </li>
-
-              <li class="menu-item">
-                    <a href="" class="menu-link">
-                        <span class="menu-text">Vans</span>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="" class="menu-link">
-                      <span class="menu-text">Damages</span>
-                  </a>
-              </li>
-
-                <li class="menu-item">
-                    <a href="" class="menu-link">
-                        <span class="menu-text">Transfers</span>
-                    </a>
-                </li>
-
-                <!-- <li class="menu-item">
-                  <a href="" class="menu-link">
-                      <span class="menu-text">Transfers</span>
-                  </a>
-              </li> -->
-
-            </ul>
-        </div>
-      </li>
-      <!-- End of Warehouse -->
-    
-
-          <!-- Report Menu -->
-    <li class="menu-item">
-      <a
-        href="ecommerce-dashboard.html#reportmenuMultilevel"
-        data-bs-toggle="collapse"
-        class="menu-link"
-      >
-        <span class="menu-icon"><i class="fas fa-print"></i></span>
-        <span class="menu-text"> Report </span>
-        <span class="menu-arrow"></span>
-      </a>
-      <!--Report Sub-Menus -->
-
-      <div class="collapse" id="reportmenuMultilevel">
-        <ul class="sub-menu">
-          <!-- HR Reports  -->
-
-          <li class="menu-item">
-            <a
-              href="ecommerce-dashboard.html#hrReportSubMenu"
-              data-bs-toggle="collapse"
-              class="menu-link"
-            >
-              <span class="menu-text"> HR </span>
-              <span class="menu-arrow"></span>
-            </a>
-            <div class="collapse" id="hrReportSubMenu">
-              <ul class="sub-menu">
-
-                <li class="menu-item">
-                  <a href="{% url 'employee-report' %}" class="menu-link">
-                    <span class="menu-text">Employees</span>
-                  </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="{% url 'employee-ssnit-report' %}" class="menu-link">
-                    <span class="menu-text">Employee SSNIT</span>
-                  </a>
-                </li>
-
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </li>
-    <!-- End of Report Menu -->
 
 
 
