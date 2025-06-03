@@ -1,0 +1,116 @@
+{% extends 'core/base.html' %} 
+{% load static %} 
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'plugin/libs/datatables.net/css/jquery.dataTables.min.css' %} ">
+
+{% endblock %}
+
+{% block scripts %}
+{% comment %} <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> {% endcomment %}
+<script src="{% static 'plugin/libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+{% endblock %}
+
+{% block content %} 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                  <p>
+                   <a href="{% url 'department-add' %}">
+                    <button type="button" class="btn btn-info rounded-pill waves-effect waves-light">
+                        <span class="btn-label"><i class="mdi mdi-plus-circle"></i></span>New Designation
+                    </button>
+                   </a>
+                  </p>
+
+
+            <p>
+                <div class="row">
+                 <div class="col-md-2">
+                     <label for="filterLevel" class="text-info">Filter by Level</label>
+                     <select id="filterLevel" class="form-control select2" data-toggle="select2" data-width="100%">
+                      <option value="">All Levels</option>
+                      {% for item in level_list %}
+                         <option value="{{ item.level }}"> {{ item.level }} </option>
+                      {% endfor %}
+                     </select>    
+                 </div>
+                </div>
+            </p>
+
+                    <table id="Table" class="table table-hover dt-responsive nowrap w-100">
+                        <thead>
+                          <tr>
+                              <th>#</th>
+                              <th>Code</th>
+                              <th>Title/Rank</th>
+                              <th>Level</th>
+                              <th>No. Staff</th>
+                              <th>Created on</th>
+                              <th>Actions</th>
+                          </tr>
+                        </thead>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+
+       var table =  $('#Table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "{% url 'designation-list-api' %}",
+                "type": "GET",
+                 "data": function(d){
+                    d.level = $('#filterLevel').val()
+                }
+            },
+            "columns": [
+                { 
+                    "data": null, // Automatically calculate the row number
+                    "orderable": false,
+                    "searchable": false,
+                    "render": function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+
+                    }
+                },
+                {"data":"code"},
+                { "data": "title" },
+                { "data": "level" },
+                {"data": "employee_count"},
+                { "data": "created_at" },
+                { "data": 'id', "orderable": false, "render": function(data, type, row) {
+                 const id = row.id
+
+                 const updateURL = `{% url 'department-update' 0 %}`.replace('0', id)
+                 const deleteURL = `{% url 'designation-delete' 0 %}`.replace('0', id)
+                 const staffURL =  `{% url 'designation-employee' 0 %}`.replace('0', id)
+
+                    return `
+                           <a href="${updateURL}" title="Edit designation"><button class="btn btn-xs btn-outline-warning rounded-pill waves-effect waves-light"><i class="fe-edit"></i></button></a>
+                           <a href="${staffURL}" title="Employees with this designation"><button class="btn btn-xs btn-outline-success rounded-pill waves-effect waves-light"><i class="fas fa-users"></i></button></a>
+                        
+                           <a href="${deleteURL}" title="Delete designation"><button class="btn btn-xs btn-outline-danger rounded-pill waves-effect waves-light"><i class="fe-trash-2"></i></button></a>`;                 
+    
+                }},
+            ],
+            "order": [[4, "desc"]]  // Default sorting by "created_at"
+        });
+
+        $('#filterLevel').change(function(){
+            table.ajax.reload()
+        })
+    
+
+    });
+</script>
+{% endblock %}

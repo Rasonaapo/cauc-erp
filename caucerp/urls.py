@@ -25,6 +25,10 @@ urlpatterns = [
 urlpatterns += [
    # path('hr/', include('hr.urls')),
     path('', include('core.urls')),
+    path('administration/', include('administration.urls')),
+    path('hr/', include('hr.urls')),
+    path('payroll/', include('payroll.urls')),
+
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,213 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link href="{% static 'plugin/libs/select2/css/select2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'plugin/libs/flatpickr/flatpickr.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/select2.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'plugin/libs/multiselect/css/multi-select.css' %}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'plugin/libs/select2/js/select2.min.js' %}"></script>
+<script src="{% static 'plugin/libs/sweetalert2/sweetalert2.min2.js' %}"></script>
+<script src="{% static 'plugin/libs/flatpickr/flatpickr.min.js' %}"></script>
+<script src="{% static 'plugin/libs/multiselect/js/jquery.multi-select.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+<!-- {% load crispy_forms_tags %} -->
+
+
+
+<div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST" id="save-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <span class="text-mute text-primary mb-2">Biodata or Personal Info</span>
+
+                   
+                    <div class="row">
+                        <!-- First column -->
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.employee_id|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.dob|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.ssnit|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.status|as_crispy_field }}     
+                            </div>
+                        </div>
+                        
+                        <!-- Second column -->
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.phone_number|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.tin|as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.employment_type|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="text-mute text-primary mb-2">Bank Info</span>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            {{ form.bank|as_crispy_field }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.branch|as_crispy_field }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.account_number|as_crispy_field }}
+                        </div>
+                    </div>
+
+
+                    <span class="text-mute text-primary mb-2">Job/Department & Salary Info</span>
+                    <div class="row mb-2">                 
+                        <div class="col-md-6">
+                            {{ form.job|as_crispy_field }}
+                           
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.hire_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.salary_grade|as_crispy_field }} 
+
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            {{ form.designation|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.tax_relief|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="{{ form.skills.id_for_label }}">{{ form.skills.label }}</label>
+                                <select class="form-control select2-multiple" data-toggle="select2" multiple="multiple" id="{{ form.skills.id_for_label }}" name="{{ form.skills.name }}" data-placeholder="Choose skills...">
+
+                                </select>
+                                <button style="display: none;" id="skills-loader" class="btn btn-default" style="border-style: none; color:blue" type="button" disabled="">
+                                    <span class="spinner-grow spinner-grow-sm me-1" role="status" aria-hidden="true"></span>
+                                    Loading required skills...
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    
+                    <span class="text-mute text-primary mt-4">National ID Info</span>
+
+
+                    <div class="row mb-2">                 
+                        <div class="col-md-6">
+                            {{ form.id_type|as_crispy_field }}
+                        </div>
+
+                        <div class="col-md-6">
+                            {{ form.id_number|as_crispy_field }}
+                        </div>
+                    </div> 
+
+                    <span class="text-mute text-primary mt-4">Guarantor's Info</span>                  
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ guarantor_form.guarantor_name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ guarantor_form.guarantor_phone_number|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <p class="mt-2">
+                        <a href="{% url 'employee-list' %}">
+                            <button type="button" class="btn btn-danger rounded-pill waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>               
+                        </a>
+                        <button type="submit" class="btn btn-success rounded-pill waves-effect waves-light m-1"><i class="fe-check-circle me-1"></i> Save Record</button>
+                    </p>     
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $('document').ready(function(){
+        $('[data-toggle="select2"]').select2()
+
+        $('.select').select2();
+        $('.dateinput').flatpickr({ altInput: true, altFormat: "F j, Y", dateFormat: "Y-m-d" });
+
+        const selectedJob = $('#id_job').val()
+        const preselectedSkills = "{{ selected_skills|safe }}"
+
+        if(selectedJob){
+            loadSkills(selectedJob, preselectedSkills)
+        }
+
+        $('#id_job').change(function(){
+            loadSkills($(this).val(), []) // reset skills when job is changed..
+        })
+
+        // function to fetch job related skills dynamically
+        function loadSkills(job_id, preselectedSkills){
+            $('#skills-loader').show()
+            $.ajax({
+                url: "{% url 'load-skills' %}",
+                data: {'job_id':job_id},
+                dataType: 'json',
+                success: function(data){
+                    $('#id_skills').empty()
+                    data.forEach(function(skill){
+                        // check if a skill was preselected, if so select
+                        const isSelected = preselectedSkills.includes(skill.id.toString()) ? 'selected': ''
+                        $('#id_skills').append(`<option value="${skill.id}" ${isSelected}> ${skill.name}</option>`)
+                    })
+                    $('#skills-loader').hide()
+                }
+            })
+        }
+
+
+    });
+</script> 
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'core/base.html' %} 
+{% load static %} 
+
+{% block styles %}
+<link href="{% static 'plugin/libs/flatpickr/flatpickr.min.css' %}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{% static 'plugin/libs/datatables.net/css/jquery.dataTables.min.css' %} ">
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'plugin/libs/sweetalert2/sweetalert2.min2.js' %}"></script>
+<script src="{% static 'plugin/libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-body">
+              <form action="" id="save-form" method="POST" >
+                {% csrf_token %}
+                <table class="table table-hover" id="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Staff ID</th>
+                            <th>Staff Name</th>
+                            <th>Amount</th>
+                            <th>Ded. Start Date</th>
+                            <th>Ded. End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in staff_credit_unions %}
+                         <tr>
+                            <th>{{ forloop.counter }}</th>
+                            <td>{{ data.employee.employee_id  }}</td>
+                            <td>{{ data.employee.first_name }} {{ data.employee.last_name }}</td>
+                            <td>
+                                <input type="number" class="form-control amount" name="amount[]" value="{{ data.amount }}" />
+                            </td>
+
+                            <td>
+                                <input type="text" class="form-control dateinput" name="start-date[]" value="{{ data.deduction_start_date|date:'Y-m-d'|default:'' }}" />
+                            </td>
+
+                            <td>
+                                <input type="text" class="form-control dateinput" name="end-date[]" value="{{ data.deduction_end_date|date:'Y-m-d'|default:'' }}" />
+                                
+                                <input type="hidden" class="form-control" name="id[]" value="{{ data.id }}" />
+
+
+                            </td>
+                         </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan='3'>
+                                <a href="{% url 'creditunion-list' %}">
+                                    <button type="button" class="btn btn-danger rounded-pill waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>               
+                                  </a>
+                            </td>
+                            <td colspan='2'></td>
+                            <td>
+                                
+                                <button type="submit" id="save-btn" class="btn btn-success rounded-pill waves-effect waves-light m-1"><i class="fe-check-circle me-1"></i> Save Record</button>        
+
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+               </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        
+        $('.dateinput').flatpickr({ altInput: true, altFormat: "F j, Y", dateFormat: "Y-m-d" });
+
+        // initialize datatable on table to enable search for employee
+        $('#table').DataTable({
+            paging: false,        // We disable pagination
+            searching: true,     
+            ordering: true,     
+            info: true,          
+            columnDefs: [
+                { orderable: false, targets: [3, 4, 5] }, // Disable sorting for input columns
+            ],
+            language: {
+                search: "Search Staff:", 
+            },
+        });        
+
+        $('#save-form').submit(function (event) {
+             // create an AJAX call
+             event.preventDefault()
+             var form = $(this);
+             var url = form.data("action");  // Retrieve the URL from data-action attribute
+             var formData = new FormData(this)
+
+              $.ajax({
+                    data: formData, // get the form data
+                    type: form.attr('method'), // GET or POST
+                    processData: false,  // Prevent jQuery from processing the data
+                    contentType: false,  // Prevent jQuery from setting the content type
+                    url: url,
+                    beforeSend: function(){
+                     //$('#login-spinner').show();
+                    $('#save-btn').html(`Saving... <i class="fas fa-spinner ml-1"></i>`).attr('disabled', 'yes');
+                    },
+                    // on success
+                    success: function (response) {
+                        const {message, status } = response
+                        status == 'fail' && Swal.fire('Oops', message, 'warning') && $('#save-btn').html(`<i class="fe-check-circle me-1"></i> Save Record`).removeAttr('disabled')
+
+                        if(status == 'success'){
+
+                            Swal.mixin({
+                            toast: !0,
+                            position: "top-end",
+                            showConfirmButton: !1,
+                            timer: 3e3,
+                            timerProgressBar: !0,
+                            onOpen: function (t) {
+                                t.addEventListener("mouseenter", Swal.stopTimer), t.addEventListener("mouseleave", Swal.resumeTimer);
+                            },
+                            }).fire({ icon: "success", title: message });
+                            setTimeout(function(){
+                                // clear form & close modal, after that load Positions..
+
+                                $('#save-btn').html(`<i class="fe-check-circle me-1"></i> Save Record`).removeAttr('disabled')
+                                const unionId = "{{ credit_union.id }}"
+                                location.href = "{% url 'creditunion-detail' 0 %}".replace('0', unionId)
+
+                            }, 3e3)
+                        }
+                    },
+                    // on error
+                    error: function (request, status, error) {
+                        console.log(`${request} ${status} ${error}`)
+                        console.log(request)
+                        // alert the error if any error occured
+                        $('#save-btn').html('<i class="fe-check-circle me-1"></i> Save Record').removeAttr('disabled')
+
+                        if(error != 'Bad Request'){
+                            Swal.fire('Error', 'Sorry, an error occured, please try again later or contact system admin', 'error')
+                        }else{
+                            let errorText = '<ul>'
+                                console.log(request.responseJSON.errors)
+
+                                let data = request.responseJSON.errors
+                                console.log(`data: ${data}`)
+
+                                $.each(data, function(index, item){
+                                    console.log(index)
+                                    console.log(item)
+                                    errorText += '<li> '+ item + '</li>'
+                                })
+                                errorText += '</ul>'
+                                Swal.fire({
+                                        title: "<span style='color:red'>Rectify the ff <strong>error(s)</strong></span>",
+                                        type: "warning",
+                                        html: errorText,
+                                 });
+                         }
+                    }
+                });
+                return false;
+            }); 
+     
+    })
+</script>
+{% endblock %}

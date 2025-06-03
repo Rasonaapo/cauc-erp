@@ -1,0 +1,104 @@
+{% extends 'core/base.html' %} 
+{% load static %} 
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'plugin/libs/datatables.net/css/jquery.dataTables.min.css' %} ">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'plugin/libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+{% endblock %}
+
+{% block content %} 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                   <p>
+                    <a href="{% url 'salaryitem-add' %}">
+                        <button type="button" class="btn btn-info rounded-pill waves-effect waves-light">
+                            <span class="btn-label"><i class="mdi mdi-plus-circle"></i></span>New Salary Item
+                        </button>
+                       </a>
+                    </p>
+
+                    <table id="Table" class="table table-hover dt-responsive nowrap w-100">
+                        <thead>
+                          <tr>
+                              <th>#</th>
+                              <th>Name</th>
+                              <th>Condition</th>
+                              <th>Entry</th>
+                              <th>Rate Type</th>
+                              <th>Rate Amount</th>
+                              <th>Dependency</th>
+                              <th>Affected Staff</th>
+                              <th>Created on</th>
+                              <th>Actions</th>
+                          </tr>
+                        </thead>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+    
+        $('#Table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "{% url 'salaryitem-list-api' %}",
+                "type": "GET"
+            },
+            "columns": [
+                { 
+                    "data": null, // Automatically calculate the row number
+                    "orderable": false,
+                    "searchable": false,
+                    "render": function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                { "data":"item_name"},
+                { "data": "alias_name" },
+                { "data": "entry" },
+                { "data": "rate_type" },
+                { "data": "rate_amount" },
+                { "data": "rate_dependency" },
+                { "data": "affected_employees" },
+              
+                { "data": "created_at" },
+                { "data": 'id', "orderable": false, "render": function(data, type, row) {
+                 const id = row.id
+
+                 const updateURL = `{% url 'salaryitem-update' 0 %}`.replace('0', id)
+                 const deleteURL = `{% url 'salaryitem-delete' 0 %}`.replace('0', id)
+                
+                 const staffURL = `{% url 'salaryitem-employee' 0 %}`.replace('0', id)
+                 const variableURL = `{% url 'salaryitem-variable' 0 %}`.replace('0', id)
+                 let url = ''
+                 if(row.rate_type == 'Variable'){
+                    url = `<a href="${variableURL}" title="set salary item employees variable"><button class="btn btn-xs btn-outline-info rounded-pill waves-effect waves-light"><i class="fas fa-user-plus"></i></button></a>`
+                 }
+
+                    return `
+                           <a href="${updateURL}" title="Edit salary item"><button class="btn btn-xs btn-outline-warning rounded-pill waves-effect waves-light"><i class="fe-edit"></i></button></a>
+                           <a href="${staffURL}" title="salary item employees"><button class="btn btn-xs btn-outline-success rounded-pill waves-effect waves-light"><i class="fas fa-users"></i></button></a>
+                           ${url}
+                           <a href="${deleteURL}" title="Delete salary grade"><button class="btn btn-xs btn-outline-danger rounded-pill waves-effect waves-light"><i class="fe-trash-2"></i></button></a>`;                 
+    
+                }},
+            ],
+            "order": [[4, "desc"]]  // Default sorting by "created_at"
+        });
+
+        
+
+    })
+</script>
+{% endblock %}
