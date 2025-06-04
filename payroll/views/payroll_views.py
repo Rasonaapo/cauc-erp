@@ -773,7 +773,7 @@ class PayrollCreateView(LoginRequiredMixin, CreateView):
 
                     salary_grade = employee.salary_grade
                     basic_salary = float(salary_grade.amount)
-                    step = salary_grade.grade_step
+                    step = salary_grade.step
 
                     # compute tax relief
                     tax_relief = employee.tax_relief or 0
@@ -860,18 +860,21 @@ class PayrollCreateView(LoginRequiredMixin, CreateView):
                     bulk_entries.append(PayrollItem(payroll=payroll_instance, employee=employee, item_type='deduction',  amount=staff_total_deductions,  entry='credit'))
                    
                     """add total staff earnings to basic salary which will be gross/taxable.."""
-                    gross = (basic_salary + staff_total_earnings)
+                    # gross = (basic_salary + staff_total_earnings)
+                    gross = Decimal(str(basic_salary)) + Decimal(str(staff_total_earnings))
+
                     taxable = gross
+
                     # take out employee ssnit from taxable/basic
+                    employee_ssnit = Decimal(employee_ssnit)
                     taxable -= employee_ssnit
                     # take out tax relief
                     taxable -= tax_relief
 
                     # Now compute for tax
                     income_tax = Tax.calculate_tax(payroll_instance.process_year, taxable)
-
                     # Add tax and employee ssnit to staff total deductions
-                    staff_total_deductions = float(staff_total_deductions)
+                    staff_total_deductions = Decimal(staff_total_deductions)
                     staff_total_deductions += (income_tax  + employee_ssnit)
 
                     # compute for net salary
@@ -896,7 +899,7 @@ class PayrollCreateView(LoginRequiredMixin, CreateView):
                     # save salary grade
                     bulk_entries.append(PayrollItem(payroll=payroll_instance, employee=employee, item_type='salary_grade', dependency=salary_grade.id))
                     # save step
-                    bulk_entries.append(PayrollItem(payroll=payroll_instance, employee=employee, item_type='step', dependency=salary_grade.grade_step.id))
+                    bulk_entries.append(PayrollItem(payroll=payroll_instance, employee=employee, item_type='step', dependency=salary_grade.step.id))
                     # save tax
                     bulk_entries.append(PayrollItem(payroll=payroll_instance, employee=employee, item_type='tax', amount=income_tax, entry='credit'))
                     # save employer & employee ssnit

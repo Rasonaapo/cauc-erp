@@ -50,6 +50,10 @@
 
                 <div class="row mt-2">
                     <div class="col-lg-4">
+                        {{ form.employment_type|as_crispy_field }}
+                    </div>
+
+                    <div class="col-lg-2">
                         {{ form.rate_type|as_crispy_field }}
                     </div>
                     <div class="col-lg-3">
@@ -58,9 +62,7 @@
                     <div class="col-lg-3" id="rate-option">
                         {{ form.rate_dependency|as_crispy_field }}
                     </div>
-                    <div class="col-lg-2">
-                        {{ form.condition|as_crispy_field }}
-                    </div>
+
                 </div>
 
                 <div class="row mt-2">

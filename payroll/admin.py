@@ -49,7 +49,7 @@ class StaffCreditUnionAdmin(admin.ModelAdmin):
 
 @admin.register(Payroll)
 class PayrollAdmin(admin.ModelAdmin):
-    list_display = ('process_month', 'process_year', 'description',  'posted', 'condition', 'payment_rate' )
+    list_display = ('process_month', 'process_year', 'description',  'posted',  'payment_rate' )
 
 @admin.register(StaffCreditUnionDeduction)
 class StaffCreditUnionDeductionAdmin(admin.ModelAdmin):

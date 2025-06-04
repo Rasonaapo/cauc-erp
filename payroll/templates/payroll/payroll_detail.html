@@ -35,7 +35,6 @@
                
                 <p class="text-muted mb-2 font-13"><strong>Payment Rate :</strong> <span class="ms-2">{{ payroll.payment_rate }}% </span></p>
 
-                <p class="text-muted mb-2 font-13"><strong>Employment Type :</strong> <span class="ms-2">{{ payroll.get_condition_display }} </span></p>
 
 
                 <p class="text-muted mb-2 font-13"><strong>Posted :</strong> <span class="ms-2">
@@ -50,6 +49,8 @@
                 <p class="text-muted mb-2 font-13"><strong>Created On :</strong> <span class="ms-2">{{ payroll.created_at|date:'d M, Y h:i A' }} </span></p>       
 
                 <h5 class="mb-3 mt-1 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle me-1"></i> Employee Filters (Dept/Job/Grade etc)</h5>
+
+               <p class="text-muted mb-2 font-13"><strong>Employment Type :</strong> <span class="ms-2">{{ payroll.display_payroll_employment_type|default:'N/A' }} </span></p>
  
                 <p class="text-muted mb-2 font-13"><strong>Step :</strong> <span class="ms-2">{{ payroll.display_payroll_step|default:'N/A' }} </span></p>
 

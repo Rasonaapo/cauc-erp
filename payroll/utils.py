@@ -42,8 +42,8 @@ def get_filtered_staff_credit_union(all_employee, department, applicable_to, exc
 def get_filtered_staff_payroll(data):
     eligible_employee = Employee.objects.active()
 
-    if data['condition'] != 'all':
-        eligible_employee = eligible_employee.filter(employment_type=data['condition'])
+    if data['employment_type'].exists():
+        eligible_employee = eligible_employee.filter(employment_type__in=data['employment_type'].all())
     
     if data['step'].exists():
         eligible_employee = eligible_employee.filter(salary_grade__grade_step__in=data['step'].all())

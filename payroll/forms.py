@@ -38,7 +38,7 @@ class SalaryItemForm(forms.ModelForm):
         job = cleaned_data.get('job')
         department = cleaned_data.get('department')
         designation = cleaned_data.get('designation')
-        condition = cleaned_data.get('condition')
+        employment_type = cleaned_data.get('employment_type')
 
         # Check if `applicable_to` is used exclusively
         if applicable_to:
@@ -51,8 +51,8 @@ class SalaryItemForm(forms.ModelForm):
                 raise ValidationError("If `applicable_to` is used, `excluded_from` must be empty.")
 
         # If `applicable_to` is not used, other filters can be used, and `excluded_from` is allowed
-        elif not any([step, salary_grade, job, department, designation, condition]):
-            raise ValidationError("If `applicable_to` is not used, at least one other filter (step, salary grade, job, department, designation, condition) must be specified.")
+        elif not any([step, salary_grade, job, department, designation, employment_type]):
+            raise ValidationError("If `applicable_to` is not used, at least one other filter (step, salary grade, job, department, designation, employment type/condition) must be specified.")
 
         return cleaned_data
         

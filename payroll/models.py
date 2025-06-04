@@ -140,7 +140,8 @@ class SalaryItem(models.Model):
         ('contractual', 'Contractual'),
         ('temporary', 'Temporary')
     )
-    condition = models.CharField(max_length=12, choices=EMPLOYMENT_TYPE, default='full_time')
+    employment_type = models.ManyToManyField('hr.EmploymentType', related_name='salary_items', blank=True, verbose_name="Employment Type")
+    # condition = models.CharField(max_length=12, choices=EMPLOYMENT_TYPE, default='full_time')
     step = models.ManyToManyField(SalaryStep, related_name='salary_items', blank=True)
     salary_grade = models.ManyToManyField(SalaryGrade, verbose_name="Salary Grade", related_name="salary_items", blank=True)
     job = models.ManyToManyField('hr.Job', related_name="salary_items", blank=True)
@@ -148,6 +149,7 @@ class SalaryItem(models.Model):
     designation = models.ManyToManyField('hr.Designation', related_name="salary_items", blank=True)
     applicable_to = models.ManyToManyField('hr.Employee', verbose_name="Applicable To", related_name='applicable_salary_items', blank=True)
     excluded_from = models.ManyToManyField('hr.Employee', verbose_name="Excluded From",  related_name='excluded_salary_items', blank=True)
+    
     eligible_employee_count = models.PositiveIntegerField(default=0, editable=False)
     
     def __init__(self, *args, **kwargs):
@@ -178,6 +180,10 @@ class SalaryItem(models.Model):
     def display_salary_item_excluded_from(self):
         return ",".join(f"{emp.first_name} {emp.last_name}" for emp in self.excluded_from.all())
 
+    def display_salary_item_employment_type(self):
+        return ",".join(employment_type.name for employment_type in self.employment_type.all())
+
+
     def get_eligible_employees(self):
         """
         Returns a queryset of eligible employees based on the specified filters.
@@ -205,10 +211,9 @@ class SalaryItem(models.Model):
             eligible_employees = eligible_employees.filter(job__department__in=self.department.all())
         if self.designation.exists():
             eligible_employees = eligible_employees.filter(designation__in=self.designation.all())
+        if self.employment_type.exists():
+            eligible_employees = eligible_employees.filter(employment_type__in=self.employment_type.all())
 
-        # Filter by employment type if `condition` is specified
-        if self.condition:
-            eligible_employees = eligible_employees.filter(employment_type=self.condition)
 
         # Exclude employees listed in `excluded_from`
         if self.excluded_from.exists():
@@ -540,7 +545,9 @@ class Payroll(models.Model):
         ('contractual', 'Contractual'),
         ('temporary', 'Temporary')
     )
-    condition = models.CharField(max_length=12, choices=EMPLOYMENT_TYPE, default='all', verbose_name="Employment Type")
+    # condition = models.CharField(max_length=12, choices=EMPLOYMENT_TYPE, default='all', verbose_name="Employment Type")
+    employment_type = models.ManyToManyField('hr.EmploymentType', related_name='payrolls', blank=True, verbose_name="Employment Type")
+
     ERROR_MODE = (
         ('strict', 'Strict mode ensures all staff records are accurate and complete before processing'),
         ('mute', 'Mute/Silence mode processes payroll to the exclusion of staff with incomplete records')
@@ -554,7 +561,7 @@ class Payroll(models.Model):
 
     class Meta:
         verbose_name_plural = "Payrolls"
-        unique_together = ('process_month', 'process_year', 'payment_rate', 'description',   'condition')
+        unique_together = ('process_month', 'process_year', 'payment_rate', 'description')
         indexes = [
             Index(fields=['process_month', 'process_year'], name='month_year_idx'),
             Index(fields=['active'], name='active_idx'),
@@ -581,6 +588,9 @@ class Payroll(models.Model):
 
     def display_payroll_excluded_from(self):
         return ",".join(f"{emp.first_name} {emp.last_name}" for emp in self.excluded_from.all())
+
+    def display_payroll_employment_type(self):
+        return ",".join(employment_type.name for employment_type in self.employment_type.all())
 
     def get_eligible_employees(self):
         from hr.models import Employee

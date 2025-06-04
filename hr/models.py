@@ -28,6 +28,14 @@ def employee_photo_upload_path(instance, filename):
 
     return f'photos/{first_name}_{last_name}_{timestamp}{file_extension}'   
 
+class EmploymentType(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.name
+
 class NationalIDType(models.Model):
     name = models.CharField(max_length=100, unique=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -90,7 +98,7 @@ class Employee(models.Model):
         ('contractual', 'Contractual'),
         ('temporary', 'Temporary')
     )
-    employment_type = models.CharField(max_length=12, choices=EMPLOYMENT_TYPE, default='full_time')
+    employment_type = models.ForeignKey('EmploymentType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Employment Type", related_name='employees')
     designation = models.ForeignKey('Designation', null=True, on_delete=models.SET_NULL, related_name='employees')
     tax_relief = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, verbose_name="Tax Relief")
     # add marital status as options

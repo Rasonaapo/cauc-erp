@@ -47,10 +47,8 @@
                         <div class="col-lg-2">
                             {{ form.payment_rate|as_crispy_field}}
                         </div>
-                        <div class="col-lg-2">
-                            {{ form.condition|as_crispy_field}}
-                        </div>
-                        <div class="col-lg-4">
+
+                        <div class="col-lg-6">
                             {{ form.description|as_crispy_field}}
                         </div>
                     </div>
@@ -69,6 +67,12 @@
                         <div class="col-lg-3">
                             {{ form.department|as_crispy_field }}
                         </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            {{ form.employment_type|as_crispy_field}}
+                          </div>
                     </div>
 
                     <div class="row mb-2">

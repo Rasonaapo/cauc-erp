@@ -62,8 +62,8 @@ class SalaryItemListApiView(LoginRequiredMixin, BaseDatatableView):
             return row.created_at.strftime('%d %b, %Y')  # Format the created_at field
         
         # <td>{{ sg.get_currency_symbol }}{{ sg.amount|default:'-' }}</t
-        if column == 'alias_name':
-            return row.get_condition_display()
+        # if column == 'alias_name':
+        #     return row.get_condition_display()
         
         if column == 'entry':
                 return row.get_effect_display()
@@ -100,7 +100,7 @@ class SalaryItemListApiView(LoginRequiredMixin, BaseDatatableView):
         if search:
             qs = qs.filter(
                 Q(item_name__icontains=search) |
-                Q(condition__icontains=search) |
+                Q(employment_type__icontains=search) |
                 Q(rate_amount__icontains=search) |
                 Q(rate_type__icontains=search) |
                 Q(rate_dependency__icontains=search) |
@@ -232,7 +232,7 @@ class CreditUnionListApiView(LoginRequiredMixin, BaseDatatableView):
     
 class PayrollListApiView(LoginRequiredMixin, BaseDatatableView):
     model = Payroll
-    columns = ['process_month', 'process_year', 'description', 'pv_count', 'posted', 'condition', 'employee_count', 'employee_error', 'created_at']
+    columns = ['process_month', 'process_year', 'description', 'pv_count', 'posted', 'employment_type', 'employee_count', 'employee_error', 'created_at']
 
     def render_column(self, row, column):
         if column == 'created_at':
@@ -241,8 +241,8 @@ class PayrollListApiView(LoginRequiredMixin, BaseDatatableView):
         if column == 'process_month':
             return row.get_process_month_display()
         
-        if column == 'condition':
-            return row.get_condition_display() 
+        if column == 'employment_type':
+            return row.display_payroll_employment_type() 
         
         if column == 'employee_count':
             return row.employee_count
