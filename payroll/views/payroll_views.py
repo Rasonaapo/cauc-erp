@@ -38,8 +38,8 @@ class SalaryGradeListView(LoginRequiredMixin, ListView):
 
 class SalaryGradeCreateView(LoginRequiredMixin, CreateView):
     model = SalaryGrade
-    template_name = 'hr/payroll/salarygrade_form.html'
-    fields = ['grade', 'grade_step', 'amount', 'currency']  
+    template_name = 'payroll/salarygrade_form.html'
+    fields = ['grade', 'step', 'amount', 'currency']  
     success_url = reverse_lazy('salarygrade-list')  
 
     def get_context_data(self, **kwargs):
@@ -54,8 +54,8 @@ class SalaryGradeCreateView(LoginRequiredMixin, CreateView):
     
 class SalaryGradeUpdateView(LoginRequiredMixin, UpdateView):
     model = SalaryGrade
-    template_name = 'hr/payroll/salarygrade_form.html'  
-    fields = ['grade', 'grade_step', 'amount', 'currency']  
+    template_name = 'payroll/salarygrade_form.html'  
+    fields = ['grade', 'step', 'amount', 'currency']  
     context_object_name = 'salary_grade'
     success_url = reverse_lazy('salarygrade-list')
 

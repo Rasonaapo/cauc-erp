@@ -93,6 +93,16 @@ class Employee(models.Model):
     employment_type = models.CharField(max_length=12, choices=EMPLOYMENT_TYPE, default='full_time')
     designation = models.ForeignKey('Designation', null=True, on_delete=models.SET_NULL, related_name='employees')
     tax_relief = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, verbose_name="Tax Relief")
+    # add marital status as options
+    MARITAL_STATUS_CHOICES = [
+        ('single', 'Single'),
+        ('married', 'Married'),
+        ('divorced', 'Divorced'),
+        ('widowed', 'Widowed'),
+        ('separated', 'Separated'),
+    ]
+    marital_status = models.CharField(max_length=10, choices=MARITAL_STATUS_CHOICES, default='single', verbose_name="Marital Status")
+    
     # Custom Manager
     objects = EmployeeManager()
     

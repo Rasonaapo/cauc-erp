@@ -30,7 +30,7 @@ class SalaryGradeListApiView(LoginRequiredMixin, BaseDatatableView):
             return row.employee_count
         
         if column == 'step':
-            return row.grade_step.step
+            return row.step.step
 
         if column == 'id':
             return row.id
@@ -126,7 +126,7 @@ def load_tax(request):
 @login_required
 def test_tax(request, **kwargs):
     from decimal import Decimal
-    
+
     amount = Decimal(kwargs['amount'])
     year = timezone.now().year
     tax = Tax.calculate_tax(year, amount)
