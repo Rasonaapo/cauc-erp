@@ -28,6 +28,8 @@ urlpatterns += [
     path('administration/', include('administration.urls')),
     path('hr/', include('hr.urls')),
     path('payroll/', include('payroll.urls')),
+    path('staff-portal/', include('staff_portal.urls')),
+    path('finance/', include('finance.urls')),
 
 ]
 

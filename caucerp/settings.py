@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'administration.apps.AdministrationConfig',
     'finance.apps.FinanceConfig',
+    'staff_portal.apps.StaffPortalConfig',
     'crispy_forms',
     'crispy_bootstrap4',
     'widget_tweaks',

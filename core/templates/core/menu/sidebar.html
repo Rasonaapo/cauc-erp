@@ -341,7 +341,11 @@
             </a>
             <div class="collapse" id="accountSubMenu">
               <ul class="sub-menu">
-
+                   <li class="menu-item">
+                        <a href="{% url 'chart-of-accounts' %}" class="menu-link">
+                          <span class="menu-text">Chart of Accounts</span>
+                        </a>               
+                    </li>
               </ul>
             </div>
             </li>
@@ -359,12 +363,12 @@
               <div class="collapse" id="revenueSubMenu">
                 <ul class="sub-menu">
   
-                  <!-- <li class="menu-item">
-                    <a href="" class="menu-link">
+                  <li class="menu-item">
+                    <a href="{% url 'transactions' %}" class="menu-link">
                       <span class="menu-text">Products</span>
                     </a>
                   </li>
-                   -->
+                   
   
                 </ul>
               </div>
