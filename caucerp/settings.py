@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
 # Set the default value of DEBUG
-DEBUG = env.bool("DEBUG", default=True)
 # Reading .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+DEBUG = env.bool("DEBUG", default=True)
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
