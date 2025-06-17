@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django_quill.fields import QuillField
 from django.db.models import Index
+from django.conf import settings
 
 User = get_user_model()
 
@@ -110,8 +111,10 @@ class Employee(models.Model):
         ('separated', 'Separated'),
     ]
     marital_status = models.CharField(max_length=10, choices=MARITAL_STATUS_CHOICES, default='single', verbose_name="Marital Status")
+    #link custom user model
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='employee_profile', null=True, blank=True)
     
-    # Custom Manager
+    #Custom Manager
     objects = EmployeeManager()
     
     def __str__(self):

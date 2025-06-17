@@ -37,7 +37,7 @@ def index(request):
         return JsonResponse({'status': 'success', 'message': 'Login successful', 'redirect_url':next_url}, status=200)
 
 
-    return render(request, 'core/login.html')
+    return render(request, 'core/auth/login.html')
 
 @login_required
 def dashboard(request):
