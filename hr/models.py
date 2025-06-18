@@ -436,3 +436,14 @@ class Designation(models.Model):
 
     class Meta:
         unique_together = ('title', 'level')
+
+# model to control employee editable fields
+class StaffEditableFieldsConfig(models.Model):
+    editable_fields = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Staff Editable Fields Config"
+
+

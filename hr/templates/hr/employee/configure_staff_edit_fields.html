@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+ <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="alert alert-info mb-3">
+                    Fields checked below can be updated by employees in their portal.
+                    </div>
+                    
+                    {% with field=form.editable_fields %}
+                        {% for value, label in field.field.choices %}
+                            {% comment %} Is this checked? {% endcomment %}
+                            {% with checked="" %}
+                                {% if value in field.value %}
+                                    {% with checked="checked" %}
+                                        <div class="form-check form-switch mb-2">
+                                            <input type="checkbox"
+                                                   name="{{ field.html_name }}"
+                                                   value="{{ value }}"
+                                                   id="{{ field.id_for_label }}_{{ forloop.counter }}"
+                                                   class="form-check-input"
+                                                   {{ checked }}>
+                                            <label class="form-check-label" for="{{ field.id_for_label }}_{{ forloop.counter }}">
+                                                {{ label }}
+                                            </label>
+                                        </div>
+                                    {% endwith %}
+                                {% else %}
+                                    <div class="form-check form-switch mb-2">
+                                        <input type="checkbox"
+                                               name="{{ field.html_name }}"
+                                               value="{{ value }}"
+                                               id="{{ field.id_for_label }}_{{ forloop.counter }}"
+                                               class="form-check-input"
+                                               {{ checked }}>
+                                        <label class="form-check-label" for="{{ field.id_for_label }}_{{ forloop.counter }}">
+                                            {{ label }}
+                                        </label>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    {% endwith %}
+
+            
+                    <p class="mt-2">
+                        <a href="{% url 'employee-list' %}">
+                            <button type="button" class="btn btn-danger rounded-pill waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>               
+                        </a>
+                        <button type="submit" class="btn btn-success rounded-pill waves-effect waves-light m-1"><i class="fe-check-circle me-1"></i> Save Record</button>
+                    </p>            
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

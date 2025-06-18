@@ -67,4 +67,6 @@ class SkillAdmin(admin.ModelAdmin):
     list_display = ('name', 'category')
     list_filter = ['category']
 
-   
+@admin.register(StaffEditableFieldsConfig)
+class StaffEditableFieldsConfigAdmin(admin.ModelAdmin):
+    list_display = ('editable_fields',)

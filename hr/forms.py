@@ -198,3 +198,31 @@ class JobForm(forms.ModelForm):
         if instance:  # Prepopulate the required_skills field
             self.fields['required_skills'].queryset = Skill.objects.all()
             self.initial['required_skills'] = instance.required_skills.all()   
+
+def get_employee_field_choices():
+    exclude_fields = [
+        'id', 'user', 'created_at', 'updated_at', 'reg_attempts', 'reg_lockout_time',
+        # add others to always exclude
+    ]
+    choices = []
+    for field in Employee._meta.get_fields():
+        # Exclude many-to-many, one-to-many, and reverse relations, or excluded fields
+        if (
+            field.name in exclude_fields or
+            field.auto_created or
+            (field.is_relation and not getattr(field, 'many_to_one', False))
+        ):
+            continue
+        verbose = getattr(field, "verbose_name", field.name).title()
+        choices.append((field.name, verbose or field.name.replace('_', ' ').title()))
+    return choices
+
+class StaffEditableFieldsForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['editable_fields'] = forms.MultipleChoiceField(
+            choices=get_employee_field_choices(),
+            widget=forms.CheckboxSelectMultiple,
+            required=False,
+            label="Allow staff to edit the following fields"
+        )

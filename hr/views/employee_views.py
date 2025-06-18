@@ -4,15 +4,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, FormView
 
 from ..models import *
 from django.urls import reverse_lazy
 from django import forms
-from ..forms import JobHistoryForm, EmployeeForm, GuarantorForm, DocumentUploadForm, SMSForm, JobForm
+from ..forms import JobHistoryForm, EmployeeForm, GuarantorForm, DocumentUploadForm, SMSForm, JobForm, StaffEditableFieldsForm
 from django.forms import modelformset_factory
 import pdb
 from django.db.models import Count
@@ -549,7 +549,32 @@ class EmployeeDetailView(LoginRequiredMixin, DetailView):
         context['documents'] = Document.objects.filter(employee=self.get_object())
         return context
 
-# SMS
+class EditStaffEditableFieldsView(LoginRequiredMixin, UserPassesTestMixin, FormView):
+    template_name = "hr/employee/configure_staff_edit_fields.html"
+    form_class = StaffEditableFieldsForm
+    success_url = reverse_lazy("employee-list")  # Change as desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Configure Staff Editable Fields'
+        return context
+    
+    def test_func(self):
+        # Replace with your actual HR admin check logic
+        user = self.request.user
+        return user.is_authenticated # and user.groups.filter(name='HR').exists()
+        # or: return is_hr_admin(user)
+
+    def get_initial(self):
+        config, _ = StaffEditableFieldsConfig.objects.get_or_create(pk=1)
+        return {"editable_fields": config.editable_fields}
+
+    def form_valid(self, form):
+        config, _ = StaffEditableFieldsConfig.objects.get_or_create(pk=1)
+        config.editable_fields = form.cleaned_data["editable_fields"]
+        config.save()
+        messages.success(self.request, 'Editable fields successfully updated.')
+        return super().form_valid(form)
 
 
 # SMS
@@ -622,3 +647,4 @@ class SMSDetailView(LoginRequiredMixin, DetailView):
         # get the list of employees who are affected by this sms
         context['employees'] = sms.get_sms_employees()
         return context
+

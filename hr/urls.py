@@ -57,6 +57,7 @@ urlpatterns += [
     path('employees/<int:pk>/photo-upload/', EmployeePhotoUpdateView.as_view(), name='employee-photo-upload'),
     path('employees/<int:pk>/documents/', EmployeeDocumentView.as_view(), name='employee-file-upload'),
     path('load-skills/', load_job_skills, name='load-skills'),
+    path('employees/configure-editable-fields/', EditStaffEditableFieldsView.as_view(), name='staff-editable-fields-config'),
     
 ]   
 
