@@ -1,61 +1,14 @@
+{% extends 'core/auth/auth_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en" data-topbar-color="dark">
-  <head>
-    <meta charset="utf-8" />
-    <title>CAUC Staff Portal | Register</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      content="A fully featured admin dashbaord for automating official tasks for CAUC."
-      name="description"
-    />
-    <meta content="Chrst Apostolic University College" name="author" />
 
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{% static 'logo/cauc_logo.png' %}" />
-    <link
-      href="{% static 'plugin/libs/jquery-toast-plugin/jquery.toast.min.css' %}"
-      rel="stylesheet"
-      type="text/css"
-    />
-
-    <!-- Theme Config Js -->
-    <script src="{% static 'js/head.js' %}"></script>
-
-    <!-- Bootstrap css -->
-    <link
-      href="{% static 'css/bootstrap.min.css' %}"
-      rel="stylesheet"
-      type="text/css"
-      id="app-style"
-    />
-
-    <!-- App css -->
-    <link
-      href="{% static 'css/app.min.css' %}"
-      rel="stylesheet"
-      type="text/css"
-    />
-
-    <!-- Icons css -->
-    <link
-      href="{% static 'plugin/css/icons.min.css' %}"
-      rel="stylesheet"
-      type="text/css"
-    />
-  </head>
-
-  <body class="authentication-bg authentication-bg-pattern">
-    <div class="account-pages mt-5 mb-5">
-
-      <div class="container">
+{% block content %}
         <div class="row justify-content-center">
           <div class="col-md-8 col-lg-6 col-xl-4">
             <div class="card bg-pattern">
               <div class="card-body p-4">
                 <div class="text-center w-75 m-auto">
                   <div class="auth-brand">
-                    <h2> Staff Portal Registration - Step 1 of 2</h2>
+                    <h4> Portal Registration Step 2 of 2</h4>
                     <a
                       href="{% url 'login' %}"
                       class="logo logo-dark text-center"
@@ -85,7 +38,7 @@
                     </a>
                   </div>
                   <p class="text-muted mb-4 mt-3">
-                    Enter your staff ID and phone number to receive token.
+                    Enter your token and password to create your account.
                   </p>
                 </div>
                 <form action="" method="POST" id="login-form">
@@ -94,24 +47,50 @@
                   <input type="hidden" name="next" value="{{ request.GET.next }}">
 
                   <div class="mb-3">
-                    <label for="staff_id" class="form-label"
-                      >Staff ID</label
+                    <label for="token" class="form-label"
+                      >Token</label
                     >
                     <input
                       class="form-control"
-                      name="staff_id"
+                      name="token"
                       type="text"
-                      id="staff_id"
+                      id="token"
                       required=""
-                      placeholder="Enter your staff ID"
+                      placeholder="Enter Token"
                     />
                   </div>
 
+                  <div class="mb-3">
+                    <label for="password" class="form-label"
+                      >Password</label
+                    >
+                    <input
+                      class="form-control"
+                      name="password"
+                      type="password"
+                      id="password"
+                      required=""
+                      placeholder="Enter Password"
+                    />
+                  </div>
 
+                  <div class="mb-3">
+                    <label for="password2" class="form-label"
+                      >Repeat Password</label
+                    >
+                    <input
+                      class="form-control"
+                      name="password2"
+                      type="password"
+                      id="password2"
+                      required=""
+                      placeholder="Repeat Password"
+                    />
+                  </div>
 
                   <div class="text-center d-grid">
                     <button class="btn btn-primary" id="save-btn" type="submit">
-                      Accept & Continue
+                      Create Account
                     </button>
                   </div>
                 </form>
@@ -125,12 +104,7 @@
 
             <div class="row mt-3">
               <div class="col-12 text-center">
-                <p>
-                  <a href="auth-recoverpw.html" class="text-white-50 ms-1"
-                    >Forgot your password?</a
-                  >
-                </p>
-
+                
               </div>
               <!-- end col -->
             </div>
@@ -138,24 +112,15 @@
           </div>
           <!-- end col -->
         </div>
+
         <!-- end row -->
       </div>
-      
       <!-- end container -->
     </div>
     <!-- end page -->
+{% endblock %}
 
-    <footer class="footer footer-alt">
-      <script>
-        document.write(new Date().getFullYear());
-      </script>
-      &copy; ERP by &nbsp;<a href="" class="text-white-50"> CAUC </a>
-    </footer>
-
-    <!-- Authentication js -->
-    <script src="{% static 'js/vendor.min.js' %}"></script>
-    <script src="{% static 'plugin/libs/sweetalert2/sweetalert2.min2.js' %}"></script>
-
+{% block javascript %}
     <script>
       $(document).ready(function () {
         $("#login-form").submit(function (e) {
@@ -164,11 +129,11 @@
           $.ajax({
             data: $(this).serialize(), // get the form data
             type: $(this).attr("method"), // GET or POST
-            url: "{% url 'staff-login'  %}",
+            url: "{% url 'staff-register-step2'  %}",
             beforeSend: function () {
               //$('#login-spinner').show();
               $("#save-btn")
-                .html(`Login in... <i class="fas fa-spinner ml-1"></i>`)
+                .html(`Creating... <i class="fas fa-spinner ml-1"></i>`)
                 .attr("disabled", "yes");
             },
             // on success
@@ -178,11 +143,11 @@
               if (status == "fail") {
                 console.log(message);
                 console.log(status);
-                $("#save-btn").html(`Log In`).removeAttr("disabled");
+                $("#save-btn").html(`Create Account`).removeAttr("disabled");
                 Swal.fire("Oops", message, "warning");
               }
               if (status == "success") {
-                let msg = "Login successful, redirecting...";
+                let msg = "Account Creation successful, redirecting...";
                 Swal.mixin({
                   toast: !0,
                   position: "top-end",
@@ -193,7 +158,7 @@
                     t.addEventListener("mouseenter", Swal.stopTimer),
                       t.addEventListener("mouseleave", Swal.resumeTimer);
                   },
-                }).fire({ icon: "success", title: msg });
+                }).fire({ icon: "success", title: message });
 
                 setTimeout(function () {
                   // clear form & close modal, after that load Positions..
@@ -203,31 +168,28 @@
               }
             },
             // on error
-            error: function (request, status, error) {
-              // alert the error if any error occured
-              $("#save-btn").html("Log In").removeAttr("disabled");
-              console.log(status);
-              console.log(error);
-              let errorText = "<ul>";
-              console.log(request.responseJSON.errors);
-              // console.log(request.responseText)
+                error: function (xhr, status, error) {
+                    $("#save-btn").html("Create Account").removeAttr("disabled");
+                    let msg = "An unexpected error occurred. Please try again.";
+                    let response = null;
+                    try {
+                    response = xhr.responseJSON;
+                    if (response && response.message) {
+                        msg = response.message;
+                    }
+                    } catch (e) {}
+                    Swal.fire("Oops", msg, "error");
 
-              let data = request.responseJSON.errors;
-
-              $.each(data, function (index, item) {
-                errorText += "<li>" + item[0] + "</li>";
-              });
-              errorText += "</ul>";
-              Swal.fire({
-                title:
-                  "<span style='color:red'>Rectify the ff <strong>error(s)</strong></span>",
-                
-                html: errorText,
-              });
-            },
+                    const statusCode = xhr.status;
+                    if (response && response.next_url) {
+                        setTimeout(function () {
+                            location.href = response.next_url;
+                        }, 3000);
+                    }
+                },
           });
         });
       });
     </script>
-  </body>
-</html>
+
+{% endblock %}

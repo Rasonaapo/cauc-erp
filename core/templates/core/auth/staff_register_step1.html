@@ -1,0 +1,174 @@
+{% extends 'core/auth/auth_base.html' %}
+{% load static %}
+
+{% block content %}
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-lg-6 col-xl-4">
+            <div class="card bg-pattern">
+              <div class="card-body p-4">
+                <div class="text-center w-75 m-auto">
+                  <div class="auth-brand">
+                    <h4> Portal Registration Step 1 of 2</h4>
+                    <a
+                      href="{% url 'login' %}"
+                      class="logo logo-dark text-center"
+                    >
+                      <span class="logo-lg">
+                        <img
+                          src="{% static 'logo/cauc_logo.png' %}"
+                          alt=""
+                          height="80px"
+                          width="80px"
+                        />
+                      </span>
+                    </a>
+
+                    <a
+                      href="{% url 'login' %}"
+                      class="logo logo-light text-center"
+                    >
+                      <span class="logo-lg">
+                        <img
+                          src="{% static 'logo/cauc_logo.png' %}"
+                          alt=""
+                          height="80px"
+                          width="80px"
+                        />
+                      </span>
+                    </a>
+                  </div>
+                  <p class="text-muted mb-4 mt-3">
+                    Enter your staff ID and proceed to password setting.
+                  </p>
+                </div>
+                <form action="" method="POST" id="login-form">
+                  {% csrf_token %}
+
+                  <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+                  <div class="mb-3">
+                    <label for="staff_id" class="form-label"
+                      >Staff ID</label
+                    >
+                    <input
+                      class="form-control"
+                      name="staff_id"
+                      type="text"
+                      id="staff_id"
+                      required=""
+                      placeholder="Enter your staff ID"
+                    />
+                  </div>
+
+
+
+                  <div class="text-center d-grid">
+                    <button class="btn btn-primary" id="save-btn" type="submit">
+                      Verify & Continue
+                    </button>
+                  </div>
+                </form>
+     
+
+
+              </div>
+              <!-- end card-body -->
+            </div>
+            <!-- end card -->
+
+            <div class="row mt-3">
+              <div class="col-12 text-center">
+                <p>
+                  <a href="{% url 'staff-login' %}" class="text-white-50 ms-1"
+                    >Already have account? Log In</a
+                  >
+                </p>
+
+              </div>
+              <!-- end col -->
+            </div>
+            <!-- end row -->
+          </div>
+          <!-- end col -->
+        </div>
+
+        <!-- end row -->
+      </div>
+      <!-- end container -->
+    </div>
+    <!-- end page -->
+{% endblock %}
+
+{% block javascript %}
+    <script>
+      $(document).ready(function () {
+        $("#login-form").submit(function (e) {
+          e.preventDefault();
+          // create an AJAX call
+          $.ajax({
+            data: $(this).serialize(), // get the form data
+            type: $(this).attr("method"), // GET or POST
+            url: "{% url 'staff-register'  %}",
+            beforeSend: function () {
+              //$('#login-spinner').show();
+              $("#save-btn")
+                .html(`Verifying... <i class="fas fa-spinner ml-1"></i>`)
+                .attr("disabled", "yes");
+            },
+            // on success
+            success: function (response) {
+              const { message, status, next_url } = response;
+
+              if (status == "fail") {
+                console.log(message);
+                console.log(status);
+                $("#save-btn").html(`Verify & Continue`).removeAttr("disabled");
+                Swal.fire("Oops", message, "warning");
+              }
+              if (status == "success") {
+                let msg = "Verification successful, redirecting...";
+                Swal.mixin({
+                  toast: !0,
+                  position: "top-end",
+                  showConfirmButton: !1,
+                  timer: 3e3,
+                  timerProgressBar: !0,
+                  onOpen: function (t) {
+                    t.addEventListener("mouseenter", Swal.stopTimer),
+                      t.addEventListener("mouseleave", Swal.resumeTimer);
+                  },
+                }).fire({ icon: "success", title: message });
+
+                setTimeout(function () {
+                  // clear form & close modal, after that load Positions..
+                  location.href = next_url;
+                }, 3000);
+                // $('#save-btn').htm l('Save Record').removeAttr('disabled')
+              }
+            },
+            // on error
+             error: function (xhr, status, error) {
+                    $("#save-btn").html("Verify & Continue").removeAttr("disabled");
+                    // Try to extract message from server
+                    let msg = "An unexpected error occurred. Please try again.";
+                    try {
+                      const response = xhr.responseJSON;
+                      if (response && response.message) {
+                        msg = response.message;
+                      }
+                      
+                      if (response && response.next_url) {
+                        setTimeout(function () {
+                            location.href = response.next_url;
+                        }, 3000);
+                    }
+                    } catch (e) {}
+                    // Show error
+                    Swal.fire("Oops", msg, "error");
+                  },
+          });
+        });
+      });
+    </script>
+
+{% endblock %}

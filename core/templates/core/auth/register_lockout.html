@@ -1,0 +1,42 @@
+{% extends 'core/auth/auth_base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+ <div class="card">
+   <div class="card-body">
+     <div class="text-center">
+        <h2 style="color:#ed4956; font-size:2.5rem;">Registration Temporarily Locked</h2>
+        <p>
+        Due to multiple failed attempts, registration has been locked for security reasons.<br>
+        Please try again after <span id="countdown" class="text-danger"></span> or contact the ICT Office for assistance.
+        </p>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+  // lockout_seconds comes from your view context
+  let secondsLeft = {{ lockout_seconds|default:0 }};
+  function pad(n) { return n < 10 ? '0'+n : n; }
+
+  function updateCountdown() {
+    if (secondsLeft <= 0) {
+      document.getElementById("countdown").textContent = "now";
+      location.reload();
+      return;
+    }
+    let min = Math.floor(secondsLeft / 60);
+    let sec = secondsLeft % 60;
+    document.getElementById("countdown").textContent = `${pad(min)}:${pad(sec)} minutes`;
+    secondsLeft -= 1;
+    setTimeout(updateCountdown, 1000);
+  }
+  updateCountdown();
+</script>
+
+{% endblock %}

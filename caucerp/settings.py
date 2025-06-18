@@ -40,6 +40,8 @@ SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(",")
 
+MNOTIFY_API_KEY = env('MNOTIFY_API_KEY')
+MNOTIFY_SENDER_ID = env('MNOTIFY_SENDER_ID')
 
 # Application definition
 
@@ -170,3 +172,41 @@ AUTH_USER_MODEL = 'core.CustomUser'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+
+LOGGING = {
+    'version': 1,  # Standard logging config version
+    'disable_existing_loggers': False,  # Retain existing loggers
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',  # Minimum log level to output (INFO and above)
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',  # Use the verbose formatter
+        },
+    },
+    'root': {
+        'handlers': ['console'],  # Send all logs to the console
+        'level': 'INFO',  # Log INFO and above
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],  # Send Django logs to the console
+            'level': 'INFO',  # Log INFO and above for Django
+            'propagate': True,  # Allow propagation to parent loggers
+        },
+        '__main__': {
+            'handlers': ['console'],  # Log for your custom scripts
+            'level': 'INFO',  # Log INFO and above
+            'propagate': True,
+        },
+    },
+}

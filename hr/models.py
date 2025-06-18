@@ -84,7 +84,7 @@ class Employee(models.Model):
     bank = models.ForeignKey(Bank, on_delete=models.DO_NOTHING, null=True, related_name='employees')
     account_number = models.CharField(max_length=24, unique=True, null=True, verbose_name='Account Number')
     branch = models.CharField(max_length=254, null=True, verbose_name='Branch')
-    tin = models.CharField(max_length=24, unique=True, null=True, verbose_name='TIN No.')
+    tin = models.CharField(max_length=24, unique=True, null=True, verbose_name='TIN No.', blank=True)
     ssnit = models.CharField(max_length=24, null=True, unique=True, verbose_name='SSNIT No.')
     hire_date = models.DateField(verbose_name='Hired Date')
     job = models.ForeignKey('Job', on_delete=models.SET_NULL, null=True, related_name='employees')
@@ -114,6 +114,9 @@ class Employee(models.Model):
     #link custom user model
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='employee_profile', null=True, blank=True)
     
+    # add registration attempt & lockout time to ensure user does not abuse the registration process
+    reg_attempts = models.PositiveIntegerField(default=0)
+    reg_lockout_time = models.DateTimeField(null=True, blank=True, help_text="Time when the user was locked out due to too many registration attempts")
     #Custom Manager
     objects = EmployeeManager()
     
