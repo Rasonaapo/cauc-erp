@@ -11,5 +11,9 @@ urlpatterns = [
 
     path('dashboard/', dashboard, name='staff-dashboard'),
     path('logout/', staff_logout, name='staff-logout'),
+    path('profile/', staff_profile, name='staff-profile'),
+    path('profile/change-password/', staff_change_password, name='staff-change-password'),
+    # path('profile/update/', staff_profile_update, name='staff-profile-update'),
+
 
 ]

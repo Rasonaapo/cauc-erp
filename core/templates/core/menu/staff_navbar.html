@@ -222,11 +222,15 @@
           aria-haspopup="false"
           aria-expanded="false"
         >
-          <img
-            src="{{ request.user.avatar.url }}"
-            alt="user-image"
-            class="rounded-circle"
-          />
+            {% if request.user.employee_profile and request.user.employee_profile.photo %}
+                <img src="{{ request.user.employee_profile.photo.url }}"
+                    alt="user-image"
+                    class="rounded-circle" />
+            {% else %}
+                <img src="{{ request.user.avatar.url }}"
+                    alt="user-image"
+                    class="rounded-circle" />
+            {% endif %}
           <span class="ms-1 d-none d-md-inline-block">
             {{ request.user.username|capfirst }}
             <i class="mdi mdi-chevron-down"></i>
@@ -235,24 +239,24 @@
         <div class="dropdown-menu dropdown-menu-end profile-dropdown">
           <!-- item-->
           <div class="dropdown-header noti-title">
-            <h6 class="text-overflow m-0">Welcome !</h6>
+            <h6 class="text-overflow m-0">Welcome {{ request.user.employee_profile.employee_id }}!</h6>
           </div>
 
           <!-- item-->
-          <a href="{% url 'profile' %}" class="dropdown-item notify-item">
+          <a href="{% url 'staff-profile' %}" class="dropdown-item notify-item">
             <i class="fe-user"></i>
-            <span>My Account</span>
+            <span>My Profile</span>
           </a>
 
           <!-- item-->
-          <a href="javascript:void(0);" class="dropdown-item notify-item">
+          {% comment %} <a href="javascript:void(0);" class="dropdown-item notify-item">
             <i class="fe-settings"></i>
             <span>Settings</span>
-          </a>
+          </a> {% endcomment %}
 
           <!-- item-->
           <a
-            href="{% url 'change-password' %}"
+            href="{% url 'staff-change-password' %}"
             class="dropdown-item notify-item"
           >
             <i class="fe-lock"></i>

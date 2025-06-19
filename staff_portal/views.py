@@ -13,8 +13,11 @@ from django.contrib.auth.views import redirect_to_login
 import time
 from core.utils import is_locked_out, send_sms
 from django.utils import timezone
-
+from hr.models import StaffEditableFieldsConfig
 import random
+
+from django.contrib.auth import update_session_auth_hash
+
 LOCKOUT_PERIOD = 60 * 60  # 1 hour in seconds
 
 import logging
@@ -269,3 +272,153 @@ class StaffRegistrationStep2View(View):
             "redirect_url": "/staff-portal/dashboard/"
         })
 
+@staff_portal_login_required
+def staff_profile(request):
+    # get employee details, guarantors, documents & job history
+    user = request.user
+    employee = get_object_or_404(Employee, user=user)
+    documents = employee.documents.all()
+    guarantors = employee.guarantors.all()
+    job_history = employee.job_history.all()
+
+    # get editable fields config
+    config = StaffEditableFieldsConfig.objects.first()
+    editable_fields = config.editable_fields if config else []
+
+    # Prepare dynamic field list for editing (HR-controlled)
+    profile_fields = []
+    for field in Employee._meta.get_fields():
+        if (
+            field.name in editable_fields
+            and not field.auto_created
+            and (not field.is_relation or getattr(field, 'many_to_one', False))
+        ):
+            field_type = "text"
+            choices = None
+            is_fk = False
+            related_model = None
+            value = getattr(employee, field.name)
+            if field.get_internal_type() == "ForeignKey":
+                related_model = field.related_model
+                choices = [(obj.pk, str(obj)) for obj in related_model.objects.all()]
+                field_type = "select"
+                value = getattr(employee, field.name + "_id")
+                is_fk = True
+            elif getattr(field, "choices", None):
+                choices = list(field.choices)
+                field_type = "select"
+            elif field.get_internal_type() == "DateField":
+                field_type = "date"
+            elif field.get_internal_type() in ("IntegerField", "BigIntegerField", "FloatField", "DecimalField"):
+                field_type = "number"
+            elif field.get_internal_type() in ("ImageField", "FileField"):
+                field_type = "file"
+            profile_fields.append({
+                "name": field.name,
+                "label": field.verbose_name.title(),
+                "type": field_type,
+                "choices": choices,
+                "value": value,
+                "is_fk": is_fk,
+                "related_model": related_model,
+            })
+
+    
+    # process POST request
+    if request.method == "POST":    
+        for pf in profile_fields:
+            fname = pf["name"]
+            ftype = pf["type"]
+            if ftype == "file":
+                uploaded_file = request.FILES.get(fname)
+                if uploaded_file:
+                    setattr(employee, fname, uploaded_file)
+            else:
+                val = request.POST.get(fname)
+                if pf["choices"] and ftype == "select":
+                    # ForeignKey handling
+                    if pf.get("is_fk", False):
+                        if val:
+                            instance = pf["related_model"].objects.get(pk=val)
+                            setattr(employee, fname, instance)
+                        else:
+                            setattr(employee, fname, None)
+                    else:
+                        setattr(employee, fname, val)
+                elif ftype == "number":
+                    setattr(employee, fname, val or None)
+                elif ftype == "date":
+                    setattr(employee, fname, val or None)
+                else:
+                    setattr(employee, fname, val)
+        employee.save()
+
+        return JsonResponse({
+            "status": "success",
+            "message": "Profile updated successfully.",
+            "redirect_url": reverse('staff-profile')
+        })
+
+    context = {
+        'title': 'My Profile',
+        'employee': employee,
+        'documents': documents,
+        'guarantors': guarantors,
+        'job_histories': job_history,
+        'editable_fields': editable_fields,
+        'profile_fields': profile_fields,  # Pass to template!
+
+    }
+
+    return render(request, 'staff_portal/staff_profile.html', context)
+
+@staff_portal_login_required
+def staff_change_password(request):
+
+    if request.method == "POST":
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        user = request.user
+
+        # confirm new password matches
+        if new_password != confirm_password:
+            return JsonResponse({
+                "status": "fail",
+                "message": "New passwords do not match."
+            }, status=400)
+
+        #  Verify old password is correct
+        if not user.check_password(old_password):
+            return JsonResponse({
+                "status": "fail",
+                "message": "Your old password is incorrect."
+            }, status=401)
+
+        # Prevent using old password as new password
+        if old_password == new_password:
+            return JsonResponse({
+                "status": "fail",
+                "message": "New password cannot be the same as old password."
+            }, status=400)
+        
+        #  Check password strength/length
+        if len(new_password) < 8:
+            return JsonResponse({
+                "status": "fail",
+                "message": "New password must be at least 8 characters."
+            }, status=400)
+        
+        # Save the new password securely
+        user.set_password(new_password)
+        user.save()
+        update_session_auth_hash(request, user)  # Prevents logout after password change
+
+        return JsonResponse({
+            "status": "success",
+            "message": "Password changed successfully.",
+            "redirect_url": reverse('staff-profile')
+        })
+
+    return render(request, 'staff_portal/staff_change_password.html', {'title':"Change Password"})
