@@ -55,7 +55,7 @@ class LeaveBalanceAdmin(admin.ModelAdmin):
 
 @admin.register(LeaveRequest)
 class LeaveRequestAdmin(admin.ModelAdmin):
-    list_display = ('employee', 'leave_type', 'start_date', 'end_date', 'status', 'days_requested', )
+    list_display = ('employee', 'request_source', 'leave_type', 'start_date', 'end_date', 'status', 'days_requested', )
 
 @admin.register(PublicHoliday)
 class PublicHolidayAdmin(admin.ModelAdmin):

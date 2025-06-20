@@ -7,40 +7,15 @@
             <div class="card bg-pattern">
               <div class="card-body p-4">
                 <div class="text-center w-75 m-auto">
-                  <div class="auth-brand">
-                    <h4> Portal Registration Step 1 of 2</h4>
-                    <a
-                      href="{% url 'login' %}"
-                      class="logo logo-dark text-center"
-                    >
-                      <span class="logo-lg">
-                        <img
-                          src="{% static 'logo/cauc_logo.png' %}"
-                          alt=""
-                          height="80px"
-                          width="80px"
-                        />
-                      </span>
-                    </a>
-
-                    <a
-                      href="{% url 'login' %}"
-                      class="logo logo-light text-center"
-                    >
-                      <span class="logo-lg">
-                        <img
-                          src="{% static 'logo/cauc_logo.png' %}"
-                          alt=""
-                          height="80px"
-                          width="80px"
-                        />
-                      </span>
-                    </a>
+                  <div class="auth-brand">                    
+                    {% include 'core/auth/auth_brand.html' %}   
                   </div>
-                  <p class="text-muted mb-4 mt-3">
-                    Enter your staff ID and proceed to password setting.
-                  </p>
                 </div>
+
+                  <h3 class="card-title mb-3 text-center">Registration Step 1 of 2</h3>
+                  <p class="text-muted mb-4 text-center">
+                    Enter your staff ID to receive token and proceed.
+                  </p>
                 <form action="" method="POST" id="login-form">
                   {% csrf_token %}
 
@@ -156,7 +131,7 @@
                       if (response && response.message) {
                         msg = response.message;
                       }
-                      
+
                       if (response && response.next_url) {
                         setTimeout(function () {
                             location.href = response.next_url;

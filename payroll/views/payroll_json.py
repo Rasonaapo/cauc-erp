@@ -149,7 +149,7 @@ def load_salary_items(request):
 
 class LoanListApiView(LoginRequiredMixin, BaseDatatableView):
     model = Loan
-    columns = ['employee', 'loan_type', 'principal_amount', 'interest_rate', 'duration_in_months', 'monthly_installment', 'outstanding_balance', 'status', 'applied_on',  'deduction_end_date', 'created_at']
+    columns = ['employee', 'loan_type', 'principal_amount', 'interest_rate', 'duration_in_months', 'monthly_installment', 'outstanding_balance', 'status', 'applied_on',  'deduction_end_date', 'created_at', 'request_source']
        
     def render_column(self, row, column):
         if column == 'created_at':
@@ -174,24 +174,21 @@ class LoanListApiView(LoginRequiredMixin, BaseDatatableView):
         if search:
             qs = qs.filter(
                 Q(loan_type__icontains=search) |
-                # Q(condition__icontains=search) |
-                # Q(rate_amount__icontains=search) |
-                # Q(rate_type__icontains=search) |
-                # Q(rate_dependency__icontains=search) |
-                # Q(alias_name__icontains=search) |
-                # Q(salary_grade__grade__icontains=search) |
                 Q(employee__first_name__icontains=search) |
-                Q(employee__last_name__icontains=search)
+                Q(employee__last_name__icontains=search) |
+                Q(request_source__icontains=search)
 
             )
         # process drop down filters from template
         status = self.request.GET.get('filterStatus')
         loan_type = self.request.GET.get('filterLoanType')
-
+        request_source = self.request.GET.get('filterRequestSource')
         if status:
             qs = qs.filter(status=status)
         if loan_type:
             qs = qs.filter(loan_type=loan_type)
+        if request_source:
+            qs = qs.filter(request_source=request_source)
             
         return qs
     

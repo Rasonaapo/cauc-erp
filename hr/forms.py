@@ -126,6 +126,7 @@ class LeaveRequestForm(forms.ModelForm):
         self.remaining_days = kwargs.pop('remaining_days', None)
         super(LeaveRequestForm, self).__init__(*args, **kwargs)
 
+        # dynamically set status options based on create and update
         if self.instance.pk:
             self.fields['status'].choices = [
                 ('Pending', 'Pending'),

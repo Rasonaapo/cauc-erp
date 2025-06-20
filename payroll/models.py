@@ -260,7 +260,12 @@ class Loan(models.Model):
         PERSONAL = 'personal', 'Personal Loan'
         MEDICAL = 'medical', 'Medical Loan'
         EDUCATION = 'education', 'Education Loan'
-
+    
+    REQUEST_SOURCE_CHOICES = [
+        ('portal', 'Staff Portal'),
+        ('admin', 'Admin Side')
+    ]
+    
     employee = models.ForeignKey('hr.Employee', on_delete=models.CASCADE, related_name='loans')
     loan_type = models.CharField(max_length=20, choices=LoanType.choices, default=LoanType.SALARY_ADVANCE, verbose_name="Loan Type")  # Example: "Housing Loan", "Car Loan"
     principal_amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Principal Amount")
@@ -278,6 +283,9 @@ class Loan(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    request_source = models.CharField(
+        max_length=20, choices=REQUEST_SOURCE_CHOICES, default='portal'
+    )
 
     class Meta:
         indexes = [

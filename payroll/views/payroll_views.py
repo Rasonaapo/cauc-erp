@@ -425,7 +425,10 @@ class LoanCreateView(LoginRequiredMixin, CreateView):
         return context
     
     def form_valid(self, form):
-        loan = form.save()
+        loan = form.instance
+        # set request source with 'admin'
+        loan.request_source = 'admin'
+        loan.save()
         messages.success(self.request, f"{loan.get_loan_type_display()} for {loan.employee.first_name} successfully created")
         return super().form_valid(form)
 

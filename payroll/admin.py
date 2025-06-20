@@ -31,7 +31,7 @@ class StaffSalaryItemAdmin(admin.ModelAdmin):
 
 @admin.register(Loan)
 class LoanAdmin(admin.ModelAdmin):
-    list_display = ('employee', 'loan_type', 'principal_amount', 'interest_rate', 'monthly_installment', 'duration_in_months', 'total_repayable_amount', 'outstanding_balance', 'status', 'applied_on', 'approved_on', 'active_on', 'deduction_end_date', )
+    list_display = ('employee', 'request_source', 'loan_type', 'principal_amount', 'interest_rate', 'monthly_installment', 'duration_in_months', 'total_repayable_amount', 'outstanding_balance', 'status', 'applied_on', 'approved_on', 'active_on', 'deduction_end_date', )
     list_filter = ('loan_type', 'status')
     search_fields = ('employee__first_name', 'employee__last_name')
 

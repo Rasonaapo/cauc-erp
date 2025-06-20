@@ -46,6 +46,7 @@ MNOTIFY_SENDER_ID = env('MNOTIFY_SENDER_ID')
 # Application definition
 
 INSTALLED_APPS = [
+    'core.apps.CoreConfig', # To use custom template for email reset
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,7 +55,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hr.apps.HrConfig',
     'payroll.apps.PayrollConfig',
-    'core.apps.CoreConfig',
     'administration.apps.AdministrationConfig',
     'finance.apps.FinanceConfig',
     'staff_portal.apps.StaffPortalConfig',
@@ -63,8 +63,10 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django.contrib.humanize',
     'django_quill',
+    'django.contrib.sites', # Required for custom email reset to use absolute URLs for assets
 
 ]
+SITE_ID = 1  # Default site ID for the current site
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -114,6 +116,15 @@ DATABASES = {
         }
     }
 }
+
+# Email
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='ERP Support <support@omegasoftwares.com>')
 
 
 # Password validation

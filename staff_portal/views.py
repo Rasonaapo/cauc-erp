@@ -35,7 +35,7 @@ class StaffPortalLoginView(View):
     template_name = "core/auth/staff_login.html"
 
     def get(self, request):
-        return render(request, self.template_name)
+        return render(request, self.template_name, {"title": "Portal Log In"})
 
     def post(self, request):
         staff_id = request.POST.get("staff_id")

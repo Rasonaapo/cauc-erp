@@ -364,6 +364,10 @@ class LeaveBalance(models.Model):
         return f"{self.employee} - {self.leave_type.name} leave balance"
     
 class LeaveRequest(models.Model):
+    REQUEST_SOURCE_CHOICES = [
+        ('portal', 'Staff Portal'),
+        ('admin', 'Admin Side')
+    ]
     employee = models.ForeignKey('Employee', on_delete=models.CASCADE, related_name='leave_requests')
     leave_type = models.ForeignKey('LeaveType', on_delete=models.CASCADE)
     start_date = models.DateField()
@@ -372,6 +376,9 @@ class LeaveRequest(models.Model):
     days_requested = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    request_source = models.CharField(
+        max_length=20, choices=REQUEST_SOURCE_CHOICES, default='portal'
+    )
 
     def save(self, *args, **kwargs):
         leave_balance = LeaveBalance.objects.get(employee=self.employee, leave_type=self.leave_type)

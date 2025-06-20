@@ -51,6 +51,14 @@
 
                             </select>
                         </div>
+                         <div class="col-md-2">
+                            <label for="requestSourceFilter" class="text-info">Filter by Status</label>
+                            <select id="requestSourceFilter" class="form-control select2" data-toggle="select2" data-width="100%">
+                                <option value="">All Request Source</option>
+                                    <option value="admin">Admin Side</option>
+                                    <option value="portal">Staff Portal</option>
+                            </select>
+                        </div>
                     </div>
                   </p>
 
@@ -65,6 +73,7 @@
                               <th>End Date</th>
                               <th>Status</th>
                               <th>Created on</th>
+                              <th>Request Src</th>
                               <th>Actions</th>
                           </tr>
                         </thead>
@@ -97,7 +106,8 @@
                 "data":function(d){
                     d.employee = $('#employeeFilter').val(),
                     d.leave_type = $('#leaveTypeFilter').val(),
-                    d.status = $('#statusFilter').val()
+                    d.status = $('#statusFilter').val(),
+                    d.request_source = $('#requestSourceFilter').val()
                 }
             },
             "columns": [
@@ -111,8 +121,8 @@
                     }
                 },
                 {"data":"employee"},
-                { "data": "leave_type"},
-                { "data": "days_requested" },
+                {"data": "leave_type"},
+                {"data": "days_requested" },
                 {"data":"start_date"},
                 {"data":"end_date"},
                 {"data":"status", "render":function(data, type, row){
@@ -134,6 +144,7 @@
                     }
                 }},
                 { "data": "created_at" },
+                {"data": "request_source"},
                 { "data": 'id', "orderable": false, "render": function(data, type, row) {
                  const id = row.id
                  const update = row.updated_at
@@ -160,7 +171,7 @@
 
         });
 
-        $('#employeeFilter, #leaveTypeFilter, #statusFilter').on('change', function(){
+        $('#employeeFilter, #leaveTypeFilter, #statusFilter, #requestSourceFilter').on('change', function(){
             table.ajax.reload()
         })
 

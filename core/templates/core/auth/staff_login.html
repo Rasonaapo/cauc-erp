@@ -11,40 +11,14 @@
 
                 <div class="text-center w-75 m-auto">
                   <div class="auth-brand">
-                    <h2> Staff Portal</h2>
-                    <a
-                      href="{% url 'staff-login' %}"
-                      class="logo logo-dark text-center"
-                    >
-                      <span class="logo-lg">
-                        <img
-                          src="{% static 'logo/cauc_logo.png' %}"
-                          alt=""
-                          height="80px"
-                          width="80px"
-                        />
-                      </span>
-                    </a>
 
-                    <a
-                      href="{% url 'login' %}"
-                      class="logo logo-light text-center"
-                    >
-                      <span class="logo-lg">
-                        <img
-                          src="{% static 'logo/cauc_logo.png' %}"
-                          alt=""
-                          height="80px"
-                          width="80px"
-                        />
-                      </span>
-                    </a>
-                  </div>
-                  <p class="text-muted mb-4 mt-3">
+                    {% include 'core/auth/auth_brand.html' %}
+                </div>
+                </div>
+                 <h3 class="card-title mb-3 text-center">Staff Portal</h3>
+                  <p class="text-muted mb-4 text-center">
                     Enter your staff ID and password to access staff portal.
                   </p>
-                </div>
-                
                 <form action="" method="POST" id="login-form">
                   {% csrf_token %}
 
@@ -112,7 +86,7 @@
             <div class="row mt-3">
               <div class="col-12 text-center">
                 <p>
-                  <a href="auth-recoverpw.html" class="text-white-50 ms-1"
+                  <a href="{% url 'password_reset' %}?login=staff" class="text-white-50 ms-1"
                     >Forgot your password?</a
                   >
                 </p>

@@ -204,7 +204,7 @@ class LeaveRequestListView(LoginRequiredMixin, ListView):
 
 class LeaveRequestAPIView(LoginRequiredMixin, BaseDatatableView):
     model = LeaveRequest
-    columns = ['id', 'employee', 'leave_type', 'days_requested', 'updated_at', 'start_date', 'end_date', 'created_at', 'status']
+    columns = ['id', 'employee', 'leave_type', 'days_requested', 'updated_at', 'start_date', 'end_date', 'created_at', 'status', 'request_source']
 
     def render_column(self, row, column):
         if column == 'created_at':
@@ -252,12 +252,14 @@ class LeaveRequestAPIView(LoginRequiredMixin, BaseDatatableView):
                 Q(employee__first_name__icontains=search) |
                 Q(employee__last_name__icontains=search) |
                 Q(leave_type__name__icontains=search) |
-                Q(status__icontains=search)
+                Q(status__icontains=search) |
+                Q(request_source__icontains=search)
             )
-                # Additional filters for employee and leave type
+        # Additional filters for employee and leave type
         employee_id = self.request.GET.get('employee', None)
         leave_type_id = self.request.GET.get('leave_type', None)
         status = self.request.GET.get('status', None)
+        request_source = self.request.GET.get('request_source', None)
 
         if employee_id:
             qs = qs.filter(employee_id=employee_id)
@@ -267,6 +269,9 @@ class LeaveRequestAPIView(LoginRequiredMixin, BaseDatatableView):
         
         if status:
             qs = qs.filter(status=status)
+        
+        if request_source:
+            qs = qs.filter(request_source=request_source)
 
         return qs
 
@@ -329,6 +334,9 @@ class LeaveRequestCreateView(LoginRequiredMixin, CreateView):
         form.instance.employee = leave_balance.employee
         form.instance.leave_type = leave_balance.leave_type
 
+        # set request source with 'admin'
+        form.instance.request_source = 'admin'
+
         if status == 'Pending':
             None # send a message/sms request is  processed
         elif status == 'Approved':
@@ -372,6 +380,7 @@ class LeaveRequestUpdateView(LoginRequiredMixin, UpdateView):
 
         # Set end_date, employee & leave_type
         form.instance.end_date = end_date
+
 
         # trigger sms notification
         if status == 'Rejected':
