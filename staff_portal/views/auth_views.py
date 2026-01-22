@@ -7,7 +7,7 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import authenticate
 from django.views import View
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.views import redirect_to_login
 import time
@@ -15,6 +15,8 @@ from core.utils import is_locked_out, send_sms
 from django.utils import timezone
 from hr.models import StaffEditableFieldsConfig
 import random
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 from django.contrib.auth import update_session_auth_hash
 
@@ -23,6 +25,15 @@ LOCKOUT_PERIOD = 60 * 60  # 1 hour in seconds
 import logging
 # Create your views here.
 
+class StaffPortalLoginRequiredMixin(LoginRequiredMixin):
+    """
+    Mixin to ensure that the user is logged in to access staff portal views.
+    Redirects to the staff portal login page if not authenticated.
+    """
+    login_url = reverse_lazy('staff-login')# Redirect to staff portal login, not admin login!
+    redirect_field_name = 'next'
+
+
 def staff_portal_login_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -30,6 +41,8 @@ def staff_portal_login_required(view_func):
             return redirect_to_login(request.get_full_path(), login_url='/staff-portal/')
         return view_func(request, *args, **kwargs)
     return _wrapped_view
+
+
 
 class StaffPortalLoginView(View):
     template_name = "core/auth/staff_login.html"
@@ -422,3 +435,5 @@ def staff_change_password(request):
         })
 
     return render(request, 'staff_portal/staff_change_password.html', {'title':"Change Password"})
+
+    

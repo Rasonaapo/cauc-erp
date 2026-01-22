@@ -321,10 +321,11 @@ class LeaveRequestCreateView(LoginRequiredMixin, CreateView):
         # Check for existing pending leave request and raise an error
         leave_balance = self.leave_balance()
 
-        if form.instance.status == 'Pending':
+        if status == 'Pending':
             if LeaveRequest.objects.filter(status='Pending', employee=leave_balance.employee).exists():
                 form.add_error("status", "Sorry, there is an existing pending leave request for same staff")
                 return self.form_invalid(form)
+        
         
         # Calculate end date, excluding weekends and public holidays
         end_date = calculate_end_date(start_date, days_requested)
