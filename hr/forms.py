@@ -31,7 +31,7 @@ class JobHistoryForm(forms.ModelForm):
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        exclude = ['created_at', 'updated_at']
+        exclude = ['created_at', 'updated_at', 'reg_attempts']
         widgets = {
             'dob':forms.DateInput(attrs={'type':'date', 'class':'datepicker', 'required':'required'}),
             'skills':forms.SelectMultiple(attrs={
